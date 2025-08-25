@@ -1,0 +1,16 @@
+{
+  "name": "NOORONX - انرژی خورشیدی نوین",
+  "short_name": "NOORONX",
+  "description": "راه‌حل‌های نوآورانه انرژی خورشیدی برای آینده‌ای پایدار",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbbf24",
+  "theme_color": "#fbbf24",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

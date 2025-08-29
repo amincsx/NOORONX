@@ -41,7 +41,7 @@ export default function EnglishHomePage() {
     const currentText = solarSentences[currentSentence] || "";
     setDisplayedText("");
     setIsTyping(true);
-    
+
     let index = 0;
     const typingInterval = setInterval(() => {
       if (index < currentText.length) {
@@ -78,24 +78,17 @@ export default function EnglishHomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Intersection Observer setup
+  // Intersection Observer setup - Disabled to prevent flickering
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    );
-
+    // Disable intersection observer to prevent flickering
+    // Elements will be visible immediately without animations
     const elements = document.querySelectorAll('.animate-on-scroll');
-    elements.forEach((el) => observerRef.current?.observe(el));
+    elements.forEach((el) => {
+      el.classList.add('animate-fade-in-up');
+    });
 
     return () => {
-      observerRef.current?.disconnect();
+      // Cleanup not needed since observer is disabled
     };
   }, []);
 
@@ -108,7 +101,7 @@ export default function EnglishHomePage() {
           <LogoVideo />
         </div>
       </div>
-      
+
       {/* Navigation moved to left side for English version */}
       <nav className="absolute max-sm:top-24 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-8 left-8 z-[9999] animate-on-scroll" style={{ position: 'absolute', zIndex: 9999 }}>
         <div className="glass rounded-2xl max-sm:p-2 max-sm:px-4 p-2">
@@ -128,24 +121,24 @@ export default function EnglishHomePage() {
           </div>
         </div>
       </nav>
-      
-      {/* Simple Language Selector - Right Side of Navigation */}
-      <div className="absolute max-sm:top-40 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-11 left-[330px] z-[99999] animate-on-scroll">
+
+      {/* Simple Language Selector - Desktop: Left side, Mobile: Center (like Farsi) */}
+      <div className="absolute top-12 left-[330px] z-[999999] animate-on-scroll max-sm:top-28 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
         <SimpleLanguageSelector currentLang="en" />
       </div>
 
       <div className="min-h-screen relative">
         <BackgroundVideo />
-        
+
         {/* Hero Section */}
         <section className="relative z-30 min-h-screen flex items-center justify-center pt-130">
           <div className="container mx-auto px-4 text-center">
             {/* Animated Solar Text */}
-            <div className="mb-8 mt-16 animate-on-scroll">
+            <div className="mb-8 mt-16 max-sm:mt-4 lg:mt-16 xl:mt-16 mt-4k animate-on-scroll">
               <div className="glass rounded-2xl p-2 max-w-md mx-auto">
                 <div className="relative overflow-hidden p-2 group hover:scale-105 transition-all duration-500">
                   <div className="absolute top-1/4 left-1/4 w-1/4 h-1/2 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-0 group-hover:opacity-100"></div>
-                  
+
                   <p className="relative text-white/80 text-sm sm:text-base lg:text-lg font-medium leading-relaxed tracking-wide min-h-[2em] group-hover:text-white transition-all duration-300 text-gradient">
                     {displayedText || ""}
                     <span className={`inline-block w-1 h-[1.2em] bg-yellow-400 ml-2 ${isTyping ? 'animate-pulse' : 'opacity-0'}`}></span>
@@ -208,7 +201,7 @@ export default function EnglishHomePage() {
                   Stay informed about the latest solar technologies and projects
                 </p>
               </div>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {[
                   {
@@ -235,8 +228,8 @@ export default function EnglishHomePage() {
                 ].map((article, index) => (
                   <article key={index} className="animate-on-scroll glass rounded-2xl overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
                     <div className="relative h-48 overflow-hidden">
-                      <img 
-                        src={article.image} 
+                      <img
+                        src={article.image}
                         alt={article.title}
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                       />
@@ -289,7 +282,7 @@ export default function EnglishHomePage() {
             </div>
           </div>
         </section>
-        
+
         {/* Toggle Button for Footer */}
         <div className="relative z-20 py-8 text-center">
           <button

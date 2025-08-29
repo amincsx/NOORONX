@@ -54,6 +54,7 @@ body {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -65,6 +66,7 @@ body {
     opacity: 0;
     transform: translateX(-50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -76,6 +78,7 @@ body {
     opacity: 0;
     transform: translateX(50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -83,9 +86,12 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -95,24 +101,31 @@ body {
   0% {
     background-position: -200px 0;
   }
+
   100% {
     background-position: calc(200px + 100%) 0;
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 @keyframes glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary), 0 0 15px var(--primary);
   }
+
   50% {
     box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
   }
@@ -121,14 +134,17 @@ body {
 /* Animation Classes */
 .animate-fade-in-up {
   animation: fadeInUp 0.8s ease-out forwards;
+  will-change: transform, opacity;
 }
 
 .animate-slide-in-left {
   animation: slideInLeft 0.8s ease-out forwards;
+  will-change: transform, opacity;
 }
 
 .animate-slide-in-right {
   animation: slideInRight 0.8s ease-out forwards;
+  will-change: transform, opacity;
 }
 
 .animate-float {
@@ -238,6 +254,20 @@ body {
   pointer-events: auto !important;
 }
 
+/* Mobile centering - Override all positioning */
+@media (max-width: 639px) {
+  .fixed-logo {
+    position: absolute !important;
+    top: 20px !important;
+    left: 50% !important;
+    right: unset !important;
+    transform: translateX(-50%) !important;
+    scale: 1.4 !important;
+    margin: 0 !important;
+    z-index: 10000 !important;
+  }
+}
+
 /* English Logo Styles - Override positioning for English version */
 .english-logo .fixed-logo {
   position: relative !important;
@@ -256,28 +286,12 @@ body {
 /* Mobile responsive adjustments for English logo */
 @media (max-width: 640px) {
   .english-logo .fixed-logo {
+    position: absolute !important;
     top: 10px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     scale: 1.4 !important;
-  }
-}
-
-/* Mobile centering */
-@media (max-width: 639px) {
-  .fixed-logo {
-    top: 20px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    scale: 1.4 !important;
-  }
-  
-  /* Use same styling as Farsi logo for English logo on mobile */
-  .english-logo .fixed-logo {
-    top: 5px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    scale: 1.4 !important;
+    z-index: 10000 !important;
   }
 }
 
@@ -304,7 +318,7 @@ body {
   .glass {
     backdrop-filter: blur(10px);
   }
-  
+
   .glass-strong {
     backdrop-filter: blur(15px);
   }
@@ -319,13 +333,91 @@ body {
   will-change: opacity;
 }
 
+/* Prevent animation flickering - Simplified approach */
+.animate-on-scroll {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.animate-on-scroll.animate-fade-in-up {
+  opacity: 1;
+  transform: none;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  
+  .animate-fade-in-up,
+  .animate-slide-in-left,
+  .animate-slide-in-right {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom breakpoint for very large screens only */
+@media (min-width: 1920px) {
+  .mt-4k {
+    margin-top: 600px !important;
+  }
+}
+
+/* Mobile Language Selector Enhancements */
+@media (max-width: 640px) {
+  /* Ensure language selector is properly positioned under nav on mobile */
+  .language-selector-container {
+    position: absolute !important;
+    top: 36px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    z-index: 999999 !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Improve touch targets for mobile */
+  .language-selector-button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    touch-action: manipulation !important;
+  }
+  
+  /* Ensure dropdown is visible and properly positioned */
+  .language-selector-dropdown {
+    position: absolute !important;
+    top: 100% !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    margin-top: 8px !important;
+    z-index: 999999 !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Improve dropdown item touch targets */
+  .language-selector-item {
+    min-height: 44px !important;
+    padding: 12px 16px !important;
+    touch-action: manipulation !important;
   }
 }

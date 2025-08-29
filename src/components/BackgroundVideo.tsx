@@ -30,7 +30,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({ className = "" }) => 
       const isMobile = width < 768; // Back to standard mobile breakpoint
       
       console.log(`Screen size: ${width}x${height}, is4K: ${is4K}, isMobile: ${isMobile}`);
-      console.log(`Current video source: ${isMobile ? 'vertical' : is4K ? '4K' : 'black'}`);
+      console.log(`Current video source: ${isMobile ? 'vertical' : 'black'}`);
       setIsMobile(isMobile);
       setIs4K(is4K);
     };
@@ -42,9 +42,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({ className = "" }) => 
   
   const sources = isMobile 
     ? ['/videos/back33vertical.mp4', '/videos/back33.mp4']
-    : is4K 
-      ? ['/videos/back334k.mp4', '/videos/back33black.mp4']
-      : ['/videos/back33black.mp4', '/videos/back33.mp4'];
+    : ['/videos/back33black.mp4', '/videos/back33.mp4']; // Same video for all non-mobile screens
   
   console.log(`Screen: Mobile=${isMobile}, 4K=${is4K}, Video: ${sources[0]}`);
   console.log(`Available sources:`, sources);

@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Card, { CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import ContentForm from '@/components/ContentForm';
 import ContentList from '@/components/ContentList';
 import ResponsiveBackground from "@/components/ResponsiveBackground";
 import { dataStore } from '@/lib/dataStore';
 import { NewsItem, EducationItem, AdminFormData } from '@/types/admin';
-import { BarChart3, Users, DollarSign, TrendingUp, Activity, Settings, Plus, Newspaper, GraduationCap, Eye, Star, ArrowLeft, LogIn, LogOut } from 'lucide-react';
+import { BarChart3, Plus, Newspaper, GraduationCap, Eye, Star, ArrowLeft, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Dashboard() {
@@ -89,7 +88,7 @@ export default function Dashboard() {
       if (showForm.item) {
         // Update existing news
         try {
-          const res = await fetch(`/api/news/${(showForm.item as NewsItem).id || (showForm.item as any)._id}`, {
+          const res = await fetch(`/api/news/${(showForm.item as NewsItem).id || (showForm.item as NewsItem)._id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -108,7 +107,7 @@ export default function Dashboard() {
           });
           if (res.ok) {
             const updated = await res.json();
-            setNewsItems(prev => prev.map(n => (n.id === updated._id || (n as any)._id === updated._id ? { ...(updated as any), id: (updated as any)._id } : n)));
+            setNewsItems(prev => prev.map(n => (n.id === updated._id || n._id === updated._id ? { ...updated, id: updated._id || updated.id } : n)));
           }
         } catch {
           // no-op

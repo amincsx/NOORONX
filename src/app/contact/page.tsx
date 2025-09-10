@@ -6,7 +6,6 @@ import ResponsiveBackground from "@/components/ResponsiveBackground";
 import Footer from "@/components/Footer";
 import Button from "@/components/ui/Button";
 import Card, { CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/Card";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({

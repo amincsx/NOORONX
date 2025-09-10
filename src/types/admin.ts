@@ -1,5 +1,6 @@
 export interface NewsItem {
     id: string;
+    _id?: string; // MongoDB ObjectId
     title: string;
     titleEn: string;
     content: string;
@@ -17,6 +18,7 @@ export interface NewsItem {
 
 export interface EducationItem {
     id: string;
+    _id?: string; // MongoDB ObjectId
     title: string;
     titleEn: string;
     description: string;

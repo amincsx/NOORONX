@@ -67,6 +67,7 @@ class MockDatabase {
       ...data,
       _id: id,
       id: id,
+      views: data.views || 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -84,12 +85,26 @@ class MockDatabase {
     
     if (index === -1) return null;
     
-    const updated = {
-      ...items[index],
-      ...updateData.$set,
-      updatedAt: new Date().toISOString()
-    };
+    let updated = { ...items[index] };
     
+    // Handle MongoDB-style $inc operations
+    if (updateData.$inc) {
+      Object.keys(updateData.$inc).forEach(key => {
+        updated[key] = (updated[key] || 0) + updateData.$inc[key];
+      });
+    }
+    
+    // Handle MongoDB-style $set operations
+    if (updateData.$set) {
+      updated = { ...updated, ...updateData.$set };
+    }
+    
+    // Handle direct property updates (for backward compatibility)
+    if (!updateData.$inc && !updateData.$set) {
+      updated = { ...updated, ...updateData };
+    }
+    
+    updated.updatedAt = new Date().toISOString();
     items[index] = updated;
     await this.saveDB(db);
     

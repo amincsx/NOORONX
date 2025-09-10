@@ -7,6 +7,8 @@ import SimpleLanguageSelector from "@/components/SimpleLanguageSelector";
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { NewsItem } from '@/types/admin';
+import { dataStore } from '@/lib/dataStore';
 
 export default function Home() {
   const pathname = usePathname();
@@ -41,12 +43,56 @@ export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showBottomSections, setShowBottomSections] = useState(false);
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
 
   // Intersection Observer for animations
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  const formatDate = (date: Date | string) => {
+    const now = new Date();
+    const itemDate = new Date(date);
+    const diffTime = Math.abs(now.getTime() - itemDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return '۱ روز پیش';
+    if (diffDays < 7) return `${diffDays} روز پیش`;
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} هفته پیش`;
+    return `${Math.ceil(diffDays / 30)} ماه پیش`;
+  };
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
   useEffect(() => {
     setIsLoaded(true);
+  }, []);
+
+  // Load latest news
+  useEffect(() => {
+    const loadNews = async () => {
+      try {
+        const res = await fetch('/api/news', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          // Get only published news and limit to 3 for homepage
+          const publishedNews = data.filter((item: NewsItem) => item.published);
+          setNewsItems(publishedNews.slice(0, 3));
+        } else {
+          // Fallback to local data
+          const allNews = dataStore.getNews();
+          const publishedNews = allNews.filter(item => item.published);
+          setNewsItems(publishedNews.slice(0, 3));
+        }
+      } catch {
+        // Fallback to local data
+        const allNews = dataStore.getNews();
+        const publishedNews = allNews.filter(item => item.published);
+        setNewsItems(publishedNews.slice(0, 3));
+      }
+    };
+    loadNews();
   }, []);
 
   // Typing effect for current sentence
@@ -224,59 +270,66 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {[
-                  {
-                    image: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?w=400&h=300&fit=crop",
-                    title: "نصب پنل‌های خورشیدی در ۱۰۰۰ خانه جدید",
-                    description: "پروژه جدید نصب پنل‌های خورشیدی در مناطق مختلف کشور آغاز شده و تا پایان سال بیش از ۱۰۰۰ خانه مجهز به انرژی خورشیدی خواهند شد...",
-                    category: "انرژی خورشیدی",
-                    date: "۲ هفته پیش"
-                  },
-                  {
-                    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop",
-                    title: "افتتاح بزرگترین مزرعه خورشیدی کشور",
-                    description: "بزرگترین مزرعه خورشیدی کشور با ظرفیت تولید ۵۰ مگاوات برق در استان یزد افتتاح شد. این پروژه می‌تواند برق ۲۰ هزار خانه را تامین کند...",
-                    category: "مزرعه خورشیدی",
-                    date: "۱ ماه پیش"
-                  },
-                  {
-                    image: "https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg?w=400&h=300&fit=crop",
-                    title: "فناوری جدید پنل‌های خورشیدی با راندمان ۳۰٪",
-                    description: "محققان ایرانی موفق به توسعه پنل‌های خورشیدی جدیدی شدند که راندمان تبدیل انرژی را تا ۳۰٪ افزایش می‌دهد...",
-                    category: "فناوری خورشیدی",
-                    date: "۳ هفته پیش"
-                  }
-                ].map((article, index) => (
-                  <article key={index} className="animate-on-scroll glass rounded-2xl overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                {newsItems.length > 0 ? newsItems.map((article, index) => (
+                  <article key={article.id} className="animate-on-scroll glass rounded-2xl overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
                     <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={article.image}
+                      <img 
+                        src={article.imageUrl || "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop"} 
                         alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <span className="inline-block bg-yellow-400/90 text-black px-3 py-1 rounded-full text-xs font-medium">
-                          {article.category}
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-yellow-500/90 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          {article.tags?.[0] || 'خبر'}
                         </span>
                       </div>
                     </div>
+                    
                     <div className="p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs text-white/50">{article.date}</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-white/80 mb-3 text-right leading-tight">
+                      <h3 className="text-xl font-bold text-white/90 mb-3 leading-tight hover:text-yellow-400 transition-colors">
                         {article.title}
                       </h3>
-                      <p className="text-white/60 text-sm leading-relaxed text-right mb-4">
-                        {article.description}
+                      <p className="text-white/70 text-sm leading-relaxed mb-4">
+                        {truncateText(article.excerpt || article.content, 120)}
                       </p>
-                      <button className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-sm font-medium">
-                        ادامه مطلب →
-                      </button>
+                      
+                      <div className="flex items-center justify-between text-xs text-white/50 mb-4">
+                        <div className="flex items-center gap-4">
+                          <span>{formatDate(article.createdAt)}</span>
+                          {article.views && article.views > 0 && (
+                            <div className="flex items-center gap-1">
+                              <span>👁</span>
+                              <span>{article.views}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <Link href={`/news/${article.id || article._id}`}>
+                        <button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-4 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 group-hover:scale-105">
+                          مطالعه کامل
+                        </button>
+                      </Link>
                     </div>
                   </article>
-                ))}
+                )) : (
+                  // Fallback content when no news is available
+                  [1, 2, 3].map((index) => (
+                    <article key={index} className="animate-on-scroll glass rounded-2xl overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                      <div className="relative h-48 overflow-hidden">
+                        <div className="w-full h-full bg-gray-700/50 flex items-center justify-center">
+                          <span className="text-white/50">در حال بارگذاری...</span>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <div className="h-6 bg-gray-700/50 rounded mb-3"></div>
+                        <div className="h-16 bg-gray-700/30 rounded mb-4"></div>
+                        <div className="h-8 bg-gray-700/20 rounded"></div>
+                      </div>
+                    </article>
+                  ))
+                )}
               </div>
             </div>
           </div>

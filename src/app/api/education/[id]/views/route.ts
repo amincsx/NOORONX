@@ -30,11 +30,10 @@ export async function PATCH(
     // Fallback to mock DB
     const educationItem = await mockDB.findById('education', id);
     if (educationItem) {
-      const currentViews = educationItem.views || 0;
       const updatedItem = await mockDB.findByIdAndUpdate('education', id, { 
-        views: currentViews + 1 
+        $inc: { views: 1 }
       });
-      return NextResponse.json({ views: updatedItem?.views || currentViews + 1 });
+      return NextResponse.json({ views: updatedItem?.views || (educationItem.views || 0) + 1 });
     }
 
     return NextResponse.json({ error: 'Education not found' }, { status: 404 });

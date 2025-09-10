@@ -30,11 +30,10 @@ export async function PATCH(
     // Fallback to mock DB
     const newsItem = await mockDB.findById('news', id);
     if (newsItem) {
-      const currentViews = newsItem.views || 0;
       const updatedItem = await mockDB.findByIdAndUpdate('news', id, { 
-        views: currentViews + 1 
+        $inc: { views: 1 }
       });
-      return NextResponse.json({ views: updatedItem?.views || currentViews + 1 });
+      return NextResponse.json({ views: updatedItem?.views || (newsItem.views || 0) + 1 });
     }
 
     return NextResponse.json({ error: 'News not found' }, { status: 404 });

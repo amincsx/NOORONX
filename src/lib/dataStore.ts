@@ -82,7 +82,8 @@ class DataStore {
             ...item,
             id: Date.now().toString(),
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
+            views: 0
         };
 
         news.unshift(newItem);
@@ -136,7 +137,8 @@ class DataStore {
             ...item,
             id: Date.now().toString(),
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
+            views: 0
         };
 
         education.unshift(newItem);

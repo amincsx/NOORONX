@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import News from '@/models/News';
 import { mockDB } from '@/lib/mockDB';
 
 export async function PATCH(
@@ -12,6 +10,9 @@ export async function PATCH(
   try {
     // Try MongoDB first
     try {
+      const connectDB = (await import('@/lib/mongodb')).default;
+      const News = (await import('@/models/News')).default;
+      
       await connectDB();
       const news = await News.findByIdAndUpdate(
         id,

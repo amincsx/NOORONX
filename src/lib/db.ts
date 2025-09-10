@@ -6,6 +6,8 @@ if (!MONGODB_URI) {
   // We don't throw here to avoid crashing build, but log for visibility
   // API routes will still fail clearly if connection is missing.
   console.warn('MONGODB_URI is not set. Set it in .env.local');
+} else {
+  console.log('MongoDB URI configured:', MONGODB_URI.replace(/\/\/.*:.*@/, '//***:***@')); // Hide credentials in logs
 }
 
 interface GlobalWithMongoose {

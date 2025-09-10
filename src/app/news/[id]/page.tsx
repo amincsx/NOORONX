@@ -27,10 +27,15 @@ export default function NewsDetailPage() {
         
         // Track view
         try {
-          await fetch(`/api/news/${id}/views`, { 
+          const viewRes = await fetch(`/api/news/${id}/views`, { 
             method: 'PATCH',
             cache: 'no-store'
           });
+          if (viewRes.ok) {
+            const viewData = await viewRes.json();
+            // Update the view count in the current item
+            setNewsItem(prev => prev ? { ...prev, views: viewData.views } : null);
+          }
         } catch (viewError) {
           console.warn('Failed to track view:', viewError);
         }

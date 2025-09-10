@@ -27,10 +27,15 @@ export default function EducationDetailPage() {
         
         // Track view
         try {
-          await fetch(`/api/education/${id}/views`, { 
+          const viewRes = await fetch(`/api/education/${id}/views`, { 
             method: 'PATCH',
             cache: 'no-store'
           });
+          if (viewRes.ok) {
+            const viewData = await viewRes.json();
+            // Update the view count in the current item
+            setEducationItem(prev => prev ? { ...prev, views: viewData.views } : null);
+          }
         } catch (viewError) {
           console.warn('Failed to track view:', viewError);
         }

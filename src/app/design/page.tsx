@@ -12,7 +12,7 @@ export default function DesignPage() {
     address: '',
     buildingType: '',
     ownership: '',
-    
+
     // Installation Space
     installationType: '',
     area: '',
@@ -20,25 +20,25 @@ export default function DesignPage() {
     roofAngle: '',
     obstacles: '',
     roofMaterial: '',
-    
+
     // Energy Consumption
     monthlyConsumption: '',
     consumptionCategory: '',
     solarGoal: '',
     residents: '',
     highConsumptionDevices: [],
-    
+
     // Financial
     budget: '',
     budgetCategory: '',
     financing: '',
     paybackPeriod: '',
-    
+
     // Technical
     gridConnection: '',
     batteryStorage: '',
     systemType: '',
-    
+
     // Contact
     fullName: '',
     phone: '',
@@ -59,11 +59,11 @@ export default function DesignPage() {
     setTimeout(() => {
       setShowConfirmation(false);
       setFormData({
-        address: '', buildingType: '', ownership: '', installationType: '', area: '', 
-        roofDirection: '', roofAngle: '', obstacles: '', roofMaterial: '', 
-        monthlyConsumption: '', consumptionCategory: '', solarGoal: '', residents: '', 
-        highConsumptionDevices: [], budget: '', budgetCategory: '', financing: '', 
-        paybackPeriod: '', gridConnection: '', batteryStorage: '', systemType: '', 
+        address: '', buildingType: '', ownership: '', installationType: '', area: '',
+        roofDirection: '', roofAngle: '', obstacles: '', roofMaterial: '',
+        monthlyConsumption: '', consumptionCategory: '', solarGoal: '', residents: '',
+        highConsumptionDevices: [], budget: '', budgetCategory: '', financing: '',
+        paybackPeriod: '', gridConnection: '', batteryStorage: '', systemType: '',
         fullName: '', phone: '', email: '', contactPreference: ''
       });
     }, 3000);
@@ -72,10 +72,10 @@ export default function DesignPage() {
   return (
     <div className="min-h-screen relative">
       <ResponsiveBackground />
-      
+
       {/* SunScroll Video Logo */}
 
-      
+
       {/* Navigation */}
       <nav className="absolute top-18 sm:top-10 w-full flex justify-center sm:w-auto sm:justify-end sm:right-12 lg:right-20 z-[9999] gap-3 sm:gap-1 scale-90 sm:scale-110">
         <Link href="/" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full">
@@ -92,16 +92,16 @@ export default function DesignPage() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8 sm:mb-12 text-right text-shadow">
               فرم درخواست مشاوره رایگان
             </h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Installation Location */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-right">🏠 اطلاعات محل نصب</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">آدرس دقیق یا کد پستی</label>
-                    <textarea 
+                    <textarea
                       value={formData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -109,10 +109,10 @@ export default function DesignPage() {
                       placeholder="برای محاسبه تابش خورشید، شرایط اقلیمی، محدودیت‌های منطقه‌ای"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">نوع ساختمان</label>
-                    <select 
+                    <select
                       value={formData.buildingType}
                       onChange={(e) => handleInputChange('buildingType', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -126,10 +126,10 @@ export default function DesignPage() {
                       <option value="agricultural">کشاورزی</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">مالکیت محل نصب</label>
-                    <select 
+                    <select
                       value={formData.ownership}
                       onChange={(e) => handleInputChange('ownership', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -145,11 +145,11 @@ export default function DesignPage() {
               {/* Installation Space */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-right">☀️ اطلاعات مربوط به سقف یا فضای نصب</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">نوع فضای قابل استفاده</label>
-                    <select 
+                    <select
                       value={formData.installationType}
                       onChange={(e) => handleInputChange('installationType', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -162,10 +162,10 @@ export default function DesignPage() {
                       <option value="vertical">دیوار عمودی</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">مساحت تقریبی قابل نصب (متر مربع)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.area}
                       onChange={(e) => handleInputChange('area', e.target.value)}
@@ -173,10 +173,10 @@ export default function DesignPage() {
                       placeholder="عدد وارد کنید"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">جهت سقف</label>
-                    <select 
+                    <select
                       value={formData.roofDirection}
                       onChange={(e) => handleInputChange('roofDirection', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -188,10 +188,10 @@ export default function DesignPage() {
                       <option value="north">شمالی</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">زاویه تقریبی (درجه)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.roofAngle}
                       onChange={(e) => handleInputChange('roofAngle', e.target.value)}
@@ -205,11 +205,11 @@ export default function DesignPage() {
               {/* Energy Consumption */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-right">⚡ اطلاعات مصرف انرژی</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">میانگین مصرف ماهانه برق (کیلووات ساعت)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.monthlyConsumption}
                       onChange={(e) => handleInputChange('monthlyConsumption', e.target.value)}
@@ -217,10 +217,10 @@ export default function DesignPage() {
                       placeholder="عدد دقیق"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">دسته‌بندی مصرف</label>
-                    <select 
+                    <select
                       value={formData.consumptionCategory}
                       onChange={(e) => handleInputChange('consumptionCategory', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -231,10 +231,10 @@ export default function DesignPage() {
                       <option value="high">زیاد (بیشتر از 600)</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">هدف از سیستم خورشیدی</label>
-                    <select 
+                    <select
                       value={formData.solarGoal}
                       onChange={(e) => handleInputChange('solarGoal', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -247,10 +247,10 @@ export default function DesignPage() {
                       <option value="sell">فروش برق به شبکه</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">تعداد ساکنین</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.residents}
                       onChange={(e) => handleInputChange('residents', e.target.value)}
@@ -264,11 +264,11 @@ export default function DesignPage() {
               {/* Financial Information */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-right">💰 اطلاعات مالی و بودجه</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">میزان بودجه اولیه (تومان)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.budget}
                       onChange={(e) => handleInputChange('budget', e.target.value)}
@@ -276,10 +276,10 @@ export default function DesignPage() {
                       placeholder="عدد"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">دسته‌بندی بودجه</label>
-                    <select 
+                    <select
                       value={formData.budgetCategory}
                       onChange={(e) => handleInputChange('budgetCategory', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -291,10 +291,10 @@ export default function DesignPage() {
                       <option value="over200">بیشتر از 200 میلیون</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">تمایل به تسهیلات</label>
-                    <select 
+                    <select
                       value={formData.financing}
                       onChange={(e) => handleInputChange('financing', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -305,10 +305,10 @@ export default function DesignPage() {
                       <option value="maybe">بستگی دارد</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">انتظار بازگشت سرمایه</label>
-                    <select 
+                    <select
                       value={formData.paybackPeriod}
                       onChange={(e) => handleInputChange('paybackPeriod', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -325,11 +325,11 @@ export default function DesignPage() {
               {/* Contact Information */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-right">📞 اطلاعات تماس</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">نام و نام خانوادگی</label>
-                    <input 
+                    <input
                       type="text"
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
@@ -338,10 +338,10 @@ export default function DesignPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">شماره تماس</label>
-                    <input 
+                    <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
@@ -350,10 +350,10 @@ export default function DesignPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">ایمیل (اختیاری)</label>
-                    <input 
+                    <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
@@ -361,10 +361,10 @@ export default function DesignPage() {
                       placeholder="ایمیل"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2 text-right">ترجیح تماس</label>
-                    <select 
+                    <select
                       value={formData.contactPreference}
                       onChange={(e) => handleInputChange('contactPreference', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
@@ -380,7 +380,7 @@ export default function DesignPage() {
 
               {/* Submit Button */}
               <div className="flex justify-center">
-                <button 
+                <button
                   type="submit"
                   className="text-white/60 px-8 py-4 text-xl font-bold relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden"
                 >
@@ -393,7 +393,7 @@ export default function DesignPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Services Section */}
       <div className="relative z-10 min-h-screen flex items-center justify-center py-8 sm:py-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -401,7 +401,7 @@ export default function DesignPage() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white/60 mb-8 sm:mb-12 text-right text-shadow">
               خدمات طراحی
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
                 <div className="h-32 bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 rounded-xl mb-4 flex items-center justify-center">
@@ -414,9 +414,9 @@ export default function DesignPage() {
                   طراحی و نصب سیستم‌های خورشیدی برای خانه‌ها و آپارتمان‌ها با بهترین کیفیت و قیمت
                 </p>
               </div>
-              
+
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
-                <div className="h-32 bg-gradient-to-br from-blue-600/20 to-blue-800/20 rounded-xl mb-4 flex items-center justify-center">
+                <div className="h-32 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl mb-4 flex items-center justify-center">
                   <span className="text-4xl">🏢</span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-white/60 mb-3 text-right">
@@ -426,7 +426,7 @@ export default function DesignPage() {
                   راه‌حل‌های خورشیدی برای کسب‌وکارها، ادارات و مراکز تجاری
                 </p>
               </div>
-              
+
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
                 <div className="h-32 bg-gradient-to-br from-green-600/20 to-green-800/20 rounded-xl mb-4 flex items-center justify-center">
                   <span className="text-4xl">🏭</span>

@@ -95,11 +95,9 @@ export default function EnglishHomePage() {
   return (
     <>
       {/* Fixed Logo and Navigation - Outside main container */}
-      {/* Logo moved to top right corner for English version */}
-      <div className="absolute max-sm:top-4 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-4 right-13 z-[9999] animate-on-scroll">
-        <div className="english-logo">
-          <LogoVideo />
-        </div>
+      {/* Logo moved to top left corner for English version */}
+      <div className="absolute max-sm:top-4 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-4 left-13 z-[9999] animate-on-scroll">
+        <LogoVideo />
       </div>
 
       {/* Navigation moved to left side for English version */}
@@ -123,7 +121,7 @@ export default function EnglishHomePage() {
       </nav>
 
       {/* Simple Language Selector - Desktop: Left side, Mobile: Center (like Farsi) */}
-      <div className="absolute top-12 left-[330px] z-[999999] animate-on-scroll max-sm:top-28 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
+      <div className="absolute top-12 left-[330px] z-[999999] animate-on-scroll max-sm:top-36 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
         <SimpleLanguageSelector currentLang="en" />
       </div>
 

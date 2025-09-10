@@ -11,7 +11,7 @@ export default function EnglishAboutPage() {
   return (
     <div className="min-h-screen relative">
       <ResponsiveBackground />
-      
+
       {/* Navigation */}
       <nav className="absolute top-18 sm:top-10 w-full flex justify-center sm:w-auto sm:justify-start sm:left-12 lg:left-20 z-[9999] gap-3 sm:gap-1 scale-90 sm:scale-110">
         <Link href="/en" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full">
@@ -19,7 +19,7 @@ export default function EnglishAboutPage() {
           <span className="relative">{t('home')}</span>
         </Link>
       </nav>
-      
+
       {/* Company Story Section */}
       <div className="relative z-10 min-h-screen flex items-center justify-center py-8 sm:py-16 pt-32 sm:pt-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -27,7 +27,7 @@ export default function EnglishAboutPage() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white/60 mb-8 sm:mb-12 text-center text-shadow">
               {t('companyStory')}
             </h2>
-            
+
             <div className="space-y-6">
               <div className="bg-black/30 backdrop-blur-sm p-6 sm:p-8 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 rounded-xl">
                 <h3 className="text-xl sm:text-2xl font-bold text-white/60 mb-4 text-center">
@@ -37,7 +37,7 @@ export default function EnglishAboutPage() {
                   {t('establishmentText')}
                 </p>
               </div>
-              
+
               <div className="bg-black/30 backdrop-blur-sm p-6 sm:p-8 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 rounded-xl">
                 <h3 className="text-xl sm:text-2xl font-bold text-white/60 mb-4 text-center">
                   {t('ourMission')}
@@ -46,7 +46,7 @@ export default function EnglishAboutPage() {
                   {t('missionText')}
                 </p>
               </div>
-              
+
               <div className="bg-black/30 backdrop-blur-sm p-6 sm:p-8 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 rounded-xl">
                 <h3 className="text-xl sm:text-2xl font-bold text-white/60 mb-4 text-center">
                   {t('vision')}
@@ -59,7 +59,7 @@ export default function EnglishAboutPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Team Section */}
       <div className="relative z-10 min-h-screen flex items-center justify-center py-8 sm:py-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -67,7 +67,7 @@ export default function EnglishAboutPage() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white/60 mb-8 sm:mb-12 text-center text-shadow">
               {t('team')}
             </h2>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
                 <div className="h-48 bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 rounded-xl mb-4 flex items-center justify-center">
@@ -81,9 +81,9 @@ export default function EnglishAboutPage() {
                   {t('renewableExpert')}
                 </p>
               </div>
-              
+
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
-                <div className="h-48 bg-gradient-to-br from-blue-600/20 to-blue-800/20 rounded-xl mb-4 flex items-center justify-center">
+                <div className="h-48 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl mb-4 flex items-center justify-center">
                   <span className="text-6xl">👨‍💻</span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-white/60 mb-2 text-center">

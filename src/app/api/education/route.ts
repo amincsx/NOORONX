@@ -1,0 +1,54 @@
+import { NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/db';
+import Education from '@/models/Education';
+import { requireAuth } from '@/lib/auth';
+
+// GET /api/education - list published education (or all with ?all=1)
+export async function GET(request: Request) {
+  try {
+    await connectToDatabase();
+    const { searchParams } = new URL(request.url);
+    const includeAll = searchParams.get('all') === '1';
+    const query = includeAll ? {} : { published: true };
+    const items = await Education.find(query).sort({ createdAt: -1 }).lean();
+    return NextResponse.json(items, { status: 200 });
+  } catch (error) {
+    console.error('GET /api/education error', error);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+  }
+}
+
+// POST /api/education - create education item
+export async function POST(request: Request) {
+  try {
+    const ok = await requireAuth(request);
+    if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    await connectToDatabase();
+    const body = await request.json();
+
+    const created = await Education.create({
+      title: body.title,
+      titleEn: body.titleEn,
+      description: body.description || '',
+      descriptionEn: body.descriptionEn || '',
+      content: body.content,
+      contentEn: body.contentEn,
+      imageUrl: body.imageUrl,
+      videoUrl: body.videoUrl,
+      duration: body.duration || '',
+      level: body.level || 'beginner',
+      category: body.category || '',
+      instructor: body.instructor || '',
+      published: Boolean(body.published),
+      featured: Boolean(body.featured),
+      tags: Array.isArray(body.tags) ? body.tags : [],
+    });
+
+    return NextResponse.json(created, { status: 201 });
+  } catch (error) {
+    console.error('POST /api/education error', error);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+  }
+}
+
+

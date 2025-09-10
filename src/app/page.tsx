@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 
 export default function Home() {
   const pathname = usePathname();
-  
+
   // Detect current language from URL
   const getCurrentLanguage = () => {
     if (pathname?.startsWith('/en')) {
@@ -108,7 +108,10 @@ export default function Home() {
   return (
     <>
       {/* Fixed Logo and Navigation - Outside main container */}
-      <LogoVideo />
+      {/* Logo with same structure as English version */}
+      <div className="absolute max-sm:top-4 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-4 left-13 z-[9999] animate-on-scroll">
+        <LogoVideo />
+      </div>
 
       {/* Navigation - Desktop: Right side, Mobile: Center (like English) */}
       <nav className="absolute top-12 right-8 max-sm:top-24 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 max-sm:right-auto z-[9999] animate-on-scroll" style={{ position: 'absolute', zIndex: 9999 }}>
@@ -131,7 +134,7 @@ export default function Home() {
       </nav>
 
       {/* Simple Language Selector - Desktop: Right side, Mobile: Center (like English) */}
-      <div className="absolute top-15 right-[270px] z-[999999] animate-on-scroll max-sm:top-28 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
+      <div className="absolute top-15 right-[270px] z-[999999] animate-on-scroll max-sm:top-36 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
         <SimpleLanguageSelector currentLang={currentLanguage} />
       </div>
 
@@ -209,7 +212,11 @@ export default function Home() {
             <div className="glass-strong rounded-3xl p-8 sm:p-12">
               <div className="text-center mb-12 animate-on-scroll">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white/80 mb-6 text-shadow">
-                  آخرین اخبار و تحولات
+                  آخرین{' '}
+                  <Link href="/news" className="text-yellow-400 hover:text-yellow-300">
+                    اخبار
+                  </Link>{' '}
+                  و تحولات
                 </h2>
                 <p className="text-xl text-white/60">
                   از جدیدترین تکنولوژی‌ها و پروژه‌های خورشیدی مطلع شوید

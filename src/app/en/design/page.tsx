@@ -11,7 +11,7 @@ export default function EnglishDesignPage() {
     address: '',
     buildingType: '',
     ownership: '',
-    
+
     // Installation Space
     installationType: '',
     area: '',
@@ -19,25 +19,25 @@ export default function EnglishDesignPage() {
     roofAngle: '',
     obstacles: '',
     roofMaterial: '',
-    
+
     // Energy Consumption
     monthlyConsumption: '',
     consumptionCategory: '',
     solarGoal: '',
     residents: '',
     highConsumptionDevices: [],
-    
+
     // Financial
     budget: '',
     budgetCategory: '',
     financing: '',
     paybackPeriod: '',
-    
+
     // Technical
     gridConnection: '',
     batteryStorage: '',
     systemType: '',
-    
+
     // Contact
     fullName: '',
     phone: '',
@@ -58,11 +58,11 @@ export default function EnglishDesignPage() {
     setTimeout(() => {
       setShowConfirmation(false);
       setFormData({
-        address: '', buildingType: '', ownership: '', installationType: '', area: '', 
-        roofDirection: '', roofAngle: '', obstacles: '', roofMaterial: '', 
-        monthlyConsumption: '', consumptionCategory: '', solarGoal: '', residents: '', 
-        highConsumptionDevices: [], budget: '', budgetCategory: '', financing: '', 
-        paybackPeriod: '', gridConnection: '', batteryStorage: '', systemType: '', 
+        address: '', buildingType: '', ownership: '', installationType: '', area: '',
+        roofDirection: '', roofAngle: '', obstacles: '', roofMaterial: '',
+        monthlyConsumption: '', consumptionCategory: '', solarGoal: '', residents: '',
+        highConsumptionDevices: [], budget: '', budgetCategory: '', financing: '',
+        paybackPeriod: '', gridConnection: '', batteryStorage: '', systemType: '',
         fullName: '', phone: '', email: '', contactPreference: ''
       });
     }, 3000);
@@ -71,7 +71,7 @@ export default function EnglishDesignPage() {
   return (
     <div className="min-h-screen relative">
       <ResponsiveBackground />
-      
+
       {/* Navigation */}
       <nav className="absolute top-18 sm:top-10 w-full flex justify-center sm:w-auto sm:justify-start sm:left-12 lg:left-20 z-[9999] gap-3 sm:gap-1 scale-90 sm:scale-110">
         <Link href="/en" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full">
@@ -87,16 +87,16 @@ export default function EnglishDesignPage() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8 sm:mb-12 text-center text-shadow">
               Free Consultation Request Form
             </h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Installation Location */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-center">🏠 Installation Location Information</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2">Exact Address or Postal Code</label>
-                    <textarea 
+                    <textarea
                       value={formData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -104,10 +104,10 @@ export default function EnglishDesignPage() {
                       placeholder="For solar radiation calculation, climate conditions, regional limitations"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Building Type</label>
-                    <select 
+                    <select
                       value={formData.buildingType}
                       onChange={(e) => handleInputChange('buildingType', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -121,10 +121,10 @@ export default function EnglishDesignPage() {
                       <option value="agricultural">Agricultural</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Installation Location Ownership</label>
-                    <select 
+                    <select
                       value={formData.ownership}
                       onChange={(e) => handleInputChange('ownership', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -140,11 +140,11 @@ export default function EnglishDesignPage() {
               {/* Installation Space */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-center">☀️ Roof or Installation Space Information</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2">Type of Available Space</label>
-                    <select 
+                    <select
                       value={formData.installationType}
                       onChange={(e) => handleInputChange('installationType', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -157,10 +157,10 @@ export default function EnglishDesignPage() {
                       <option value="vertical">Vertical Wall</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Approximate Installable Area (Square Meters)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.area}
                       onChange={(e) => handleInputChange('area', e.target.value)}
@@ -168,10 +168,10 @@ export default function EnglishDesignPage() {
                       placeholder="Enter number"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Roof Direction</label>
-                    <select 
+                    <select
                       value={formData.roofDirection}
                       onChange={(e) => handleInputChange('roofDirection', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -183,10 +183,10 @@ export default function EnglishDesignPage() {
                       <option value="north">North</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Approximate Angle (Degrees)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.roofAngle}
                       onChange={(e) => handleInputChange('roofAngle', e.target.value)}
@@ -200,11 +200,11 @@ export default function EnglishDesignPage() {
               {/* Energy Consumption */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-center">⚡ Energy Consumption Information</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2">Average Monthly Electricity Consumption (kWh)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.monthlyConsumption}
                       onChange={(e) => handleInputChange('monthlyConsumption', e.target.value)}
@@ -212,10 +212,10 @@ export default function EnglishDesignPage() {
                       placeholder="Exact number"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Consumption Category</label>
-                    <select 
+                    <select
                       value={formData.consumptionCategory}
                       onChange={(e) => handleInputChange('consumptionCategory', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -226,10 +226,10 @@ export default function EnglishDesignPage() {
                       <option value="high">High (Over 600 kWh)</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Solar System Goal</label>
-                    <select 
+                    <select
                       value={formData.solarGoal}
                       onChange={(e) => handleInputChange('solarGoal', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -242,10 +242,10 @@ export default function EnglishDesignPage() {
                       <option value="sell">Sell Power to Grid</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Number of Residents</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.residents}
                       onChange={(e) => handleInputChange('residents', e.target.value)}
@@ -259,11 +259,11 @@ export default function EnglishDesignPage() {
               {/* Financial Information */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-center">💰 Financial and Budget Information</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2">Initial Budget Amount (Toman)</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.budget}
                       onChange={(e) => handleInputChange('budget', e.target.value)}
@@ -271,10 +271,10 @@ export default function EnglishDesignPage() {
                       placeholder="Number"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Budget Category</label>
-                    <select 
+                    <select
                       value={formData.budgetCategory}
                       onChange={(e) => handleInputChange('budgetCategory', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -286,10 +286,10 @@ export default function EnglishDesignPage() {
                       <option value="over200">Over 200 Million</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Interest in Financing</label>
-                    <select 
+                    <select
                       value={formData.financing}
                       onChange={(e) => handleInputChange('financing', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -300,10 +300,10 @@ export default function EnglishDesignPage() {
                       <option value="maybe">Depends</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Expected Return on Investment</label>
-                    <select 
+                    <select
                       value={formData.paybackPeriod}
                       onChange={(e) => handleInputChange('paybackPeriod', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -320,11 +320,11 @@ export default function EnglishDesignPage() {
               {/* Contact Information */}
               <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30">
                 <h3 className="text-xl font-bold text-white mb-4 text-center">📞 Contact Information</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white text-sm mb-2">Full Name</label>
-                    <input 
+                    <input
                       type="text"
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
@@ -333,10 +333,10 @@ export default function EnglishDesignPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Phone Number</label>
-                    <input 
+                    <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
@@ -345,10 +345,10 @@ export default function EnglishDesignPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Email (Optional)</label>
-                    <input 
+                    <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
@@ -356,10 +356,10 @@ export default function EnglishDesignPage() {
                       placeholder="Email"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-white text-sm mb-2">Contact Preference</label>
-                    <select 
+                    <select
                       value={formData.contactPreference}
                       onChange={(e) => handleInputChange('contactPreference', e.target.value)}
                       className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white"
@@ -375,7 +375,7 @@ export default function EnglishDesignPage() {
 
               {/* Submit Button */}
               <div className="flex justify-center">
-                <button 
+                <button
                   type="submit"
                   className="text-white/60 px-8 py-4 text-xl font-bold relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden"
                 >
@@ -387,7 +387,7 @@ export default function EnglishDesignPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Services Section */}
       <div className="relative z-10 min-h-screen flex items-center justify-center py-8 sm:py-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -395,7 +395,7 @@ export default function EnglishDesignPage() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white/60 mb-8 sm:mb-12 text-center text-shadow">
               Design Services
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
                 <div className="h-32 bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 rounded-xl mb-4 flex items-center justify-center">
@@ -408,9 +408,9 @@ export default function EnglishDesignPage() {
                   Design and installation of solar systems for homes and apartments with the best quality and price
                 </p>
               </div>
-              
+
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
-                <div className="h-32 bg-gradient-to-br from-blue-600/20 to-blue-800/20 rounded-xl mb-4 flex items-center justify-center">
+                <div className="h-32 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl mb-4 flex items-center justify-center">
                   <span className="text-4xl">🏢</span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-white/60 mb-3 text-center">
@@ -420,7 +420,7 @@ export default function EnglishDesignPage() {
                   Solar solutions for businesses, offices, and commercial centers
                 </p>
               </div>
-              
+
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
                 <div className="h-32 bg-gradient-to-br from-green-600/20 to-green-800/20 rounded-xl mb-4 flex items-center justify-center">
                   <span className="text-4xl">🏭</span>

@@ -189,10 +189,13 @@ export default function EducationPage() {
                     )}
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-4 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2 mt-auto">
+                  <Link 
+                    href={`/education/${item.id || (item as any)._id}`}
+                    className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-4 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2 mt-auto"
+                  >
                     {item.videoUrl ? <PlayCircle className="w-4 h-4" /> : null}
-                    شروع دوره
-                  </button>
+                    مطالعه کامل
+                  </Link>
                 </article>
               ))}
             </div>

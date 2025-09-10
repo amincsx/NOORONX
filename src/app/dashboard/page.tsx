@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
+  const [apiError, setApiError] = useState('');
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [educationItems, setEducationItems] = useState<EducationItem[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'news' | 'education'>('overview');
@@ -58,12 +59,15 @@ export default function Dashboard() {
         if (res.ok) {
           const data = await res.json();
           setNewsItems(data);
+          setApiError('');
         } else {
           // Fallback to local for dev if API fails
           setNewsItems(dataStore.getNews());
+          setApiError('بانک اطلاعات متصل نیست - استفاده از داده‌های آزمایشی');
         }
       } catch {
         setNewsItems(dataStore.getNews());
+        setApiError('بانک اطلاعات متصل نیست - استفاده از داده‌های آزمایشی');
       }
     };
     loadNews();
@@ -422,6 +426,20 @@ export default function Dashboard() {
               </div>
             </div>
           </header>
+
+          {/* API Status Notification */}
+          {apiError && (
+            <div className="relative z-20 mx-4 mb-6">
+              <div className="max-w-4xl mx-auto">
+                <div className="glass rounded-lg p-4 border border-yellow-500/30 bg-yellow-500/10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className="text-yellow-200 text-sm">{apiError}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
       {/* Navigation Tabs */}
       <div className="relative z-20 mb-8">

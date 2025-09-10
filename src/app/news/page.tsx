@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import ResponsiveBackground from '@/components/ResponsiveBackground';
 import { NewsItem } from '@/types/admin';
-import { Calendar, User, Eye } from 'lucide-react';
+import { dataStore } from '@/lib/dataStore';
+import { Calendar, User } from 'lucide-react';
 
 export default function NewsPage() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
@@ -21,7 +22,10 @@ export default function NewsPage() {
         const data = await res.json();
         setNewsItems(data);
       } catch (e) {
-        setError('خطا در بارگذاری اخبار');
+        console.warn('API failed, using sample data:', e);
+        // Fallback to sample data if API fails
+        const sampleNews = dataStore.getNews().filter(item => item.published);
+        setNewsItems(sampleNews);
       } finally {
         setLoading(false);
       }

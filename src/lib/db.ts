@@ -21,13 +21,25 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
   }
 
   if (!globalForMongoose.mongoosePromise) {
+    console.log('Attempting MongoDB connection with URI:', MONGODB_URI ? 'URI is set' : 'URI is missing');
     globalForMongoose.mongoosePromise = mongoose.connect(MONGODB_URI, {
       dbName: process.env.MONGODB_DB || undefined,
+    }).catch((error) => {
+      console.error('MongoDB connection failed:', error);
+      throw error;
     });
   }
 
-  globalForMongoose.mongooseConn = await globalForMongoose.mongoosePromise;
-  return globalForMongoose.mongooseConn;
+  try {
+    globalForMongoose.mongooseConn = await globalForMongoose.mongoosePromise;
+    console.log('MongoDB connected successfully');
+    return globalForMongoose.mongooseConn;
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    // Reset promise so next attempt can try again
+    globalForMongoose.mongoosePromise = undefined;
+    throw error;
+  }
 }
 
 

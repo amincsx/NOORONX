@@ -43,6 +43,21 @@ export default function Dashboard() {
     setLoginForm({ username: '', password: '' });
   };
 
+  const testDatabaseConnection = async () => {
+    try {
+      setApiError('در حال تست اتصال به دیتابیس...');
+      const res = await fetch('/api/test');
+      const data = await res.json();
+      if (data.status === 'success') {
+        setApiError(`✅ اتصال موفق: ${data.timestamp}`);
+      } else {
+        setApiError(`❌ خطای اتصال: ${data.message} - ${data.error}`);
+      }
+    } catch (error) {
+      setApiError(`❌ خطا در تست: ${error instanceof Error ? error.message : 'خطای نامشخص'}`);
+    }
+  };
+
   useEffect(() => {
     // Check if user is already authenticated
     const isAuth = sessionStorage.getItem('adminAuthenticated') === 'true';
@@ -112,9 +127,13 @@ export default function Dashboard() {
           if (res.ok) {
             const updated = await res.json();
             setNewsItems(prev => prev.map(n => (n.id === updated._id || n._id === updated._id ? { ...updated, id: updated._id || updated.id } : n)));
+            setApiError('');
+          } else {
+            const errorData = await res.text();
+            setApiError(`خطا در بروزرسانی خبر: ${res.status} - ${errorData}`);
           }
-        } catch {
-          // no-op
+        } catch (error) {
+          setApiError(`خطا در ارتباط با سرور: ${error instanceof Error ? error.message : 'خطای نامشخص'}`);
         }
       } else {
         // Add new news
@@ -139,9 +158,13 @@ export default function Dashboard() {
           if (res.ok) {
             const created = await res.json();
             setNewsItems(prev => [{ ...(created as any), id: (created as any)._id }, ...prev]);
+            setApiError('');
+          } else {
+            const errorData = await res.text();
+            setApiError(`خطا در ایجاد خبر: ${res.status} - ${errorData}`);
           }
-        } catch {
-          // no-op
+        } catch (error) {
+          setApiError(`خطا در ارتباط با سرور: ${error instanceof Error ? error.message : 'خطای نامشخص'}`);
         }
       }
     } else {
@@ -219,18 +242,26 @@ export default function Dashboard() {
         const res = await fetch(`/api/news/${id}`, { method: 'DELETE' });
         if (res.ok) {
           setNewsItems(prev => prev.filter(n => n.id !== id && (n as any)._id !== id));
+          setApiError('');
+        } else {
+          const errorData = await res.text();
+          setApiError(`خطا در حذف خبر: ${res.status} - ${errorData}`);
         }
-      } catch {
-        // no-op
+      } catch (error) {
+        setApiError(`خطا در ارتباط با سرور: ${error instanceof Error ? error.message : 'خطای نامشخص'}`);
       }
     } else {
       try {
         const res = await fetch(`/api/education/${id}`, { method: 'DELETE' });
         if (res.ok) {
           setEducationItems(prev => prev.filter(e => e.id !== id && (e as any)._id !== id));
+          setApiError('');
+        } else {
+          const errorData = await res.text();
+          setApiError(`خطا در حذف آموزش: ${res.status} - ${errorData}`);
         }
-      } catch {
-        // no-op
+      } catch (error) {
+        setApiError(`خطا در ارتباط با سرور: ${error instanceof Error ? error.message : 'خطای نامشخص'}`);
       }
     }
   };
@@ -413,11 +444,18 @@ export default function Dashboard() {
                   مدیریت محتوای وب‌سایت انرژی خورشیدی
                 </p>
                 
-                {/* Logout Button */}
-                <div className="mt-4">
+                {/* Logout Button and Test Button */}
+                <div className="mt-4 flex justify-center gap-4">
+                  <button
+                    onClick={testDatabaseConnection}
+                    className="glass rounded-full px-4 py-2 hover-lift transition-all duration-300 group flex items-center gap-2 text-white/80 hover:text-white"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    تست دیتابیس
+                  </button>
                   <button
                     onClick={handleLogout}
-                    className="glass rounded-full px-4 py-2 hover-lift transition-all duration-300 group flex items-center gap-2 text-white/80 hover:text-white mx-auto"
+                    className="glass rounded-full px-4 py-2 hover-lift transition-all duration-300 group flex items-center gap-2 text-white/80 hover:text-white"
                   >
                     <LogOut className="w-4 h-4" />
                     خروج

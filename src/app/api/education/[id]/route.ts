@@ -3,12 +3,15 @@ import { connectToDatabase } from '@/lib/db';
 import Education from '@/models/Education';
 import { requireAuth } from '@/lib/auth';
 
-type Params = { params: { id: string } };
+interface RouteParams {
+  params: Promise<{ id: string }>;
+}
 
-export async function GET(_req: Request, { params }: Params) {
+export async function GET(_req: Request, props: RouteParams) {
   try {
+    const { id } = await props.params;
     await connectToDatabase();
-    const item = await Education.findById(params.id).lean();
+    const item = await Education.findById(id).lean();
     if (!item) return NextResponse.json({ message: 'Not found' }, { status: 404 });
     return NextResponse.json(item, { status: 200 });
   } catch (error) {
@@ -17,15 +20,16 @@ export async function GET(_req: Request, { params }: Params) {
   }
 }
 
-export async function PUT(request: Request, { params }: Params) {
+export async function PUT(request: Request, props: RouteParams) {
   try {
+    const { id } = await props.params;
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     await connectToDatabase();
     const body = await request.json();
 
     const updated = await Education.findByIdAndUpdate(
-      params.id,
+      id,
       {
         $set: {
           title: body.title,
@@ -56,12 +60,13 @@ export async function PUT(request: Request, { params }: Params) {
   }
 }
 
-export async function DELETE(request: Request, { params }: Params) {
+export async function DELETE(request: Request, props: RouteParams) {
   try {
+    const { id } = await props.params;
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     await connectToDatabase();
-    const res = await Education.findByIdAndDelete(params.id).lean();
+    const res = await Education.findByIdAndDelete(id).lean();
     if (!res) return NextResponse.json({ message: 'Not found' }, { status: 404 });
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

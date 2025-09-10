@@ -24,6 +24,16 @@ export default function NewsDetailPage() {
         if (!res.ok) throw new Error('Failed to load news');
         const data = await res.json();
         setNewsItem(data);
+        
+        // Track view
+        try {
+          await fetch(`/api/news/${id}/views`, { 
+            method: 'PATCH',
+            cache: 'no-store'
+          });
+        } catch (viewError) {
+          console.warn('Failed to track view:', viewError);
+        }
       } catch (e) {
         console.warn('API failed, using sample data:', e);
         // Fallback to sample data if API fails
@@ -128,6 +138,10 @@ export default function NewsDetailPage() {
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
                 {newsItem.author || 'مدیر سایت'}
+              </div>
+              <div className="flex items-center gap-2">
+                <Eye className="w-4 h-4" />
+                کل بازدید: {newsItem.views || 0}
               </div>
               {newsItem.featured && (
                 <div className="bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs">

@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 import ResponsiveBackground from '@/components/ResponsiveBackground';
 import { EducationItem } from '@/types/admin';
 import { dataStore } from '@/lib/dataStore';
-import { Calendar, User, ArrowRight, Play, FileText } from 'lucide-react';
+import { Calendar, User, ArrowRight, Play, FileText, Eye } from 'lucide-react';
 
 export default function EducationDetailPage() {
   const params = useParams();
@@ -24,6 +24,16 @@ export default function EducationDetailPage() {
         if (!res.ok) throw new Error('Failed to load education');
         const data = await res.json();
         setEducationItem(data);
+        
+        // Track view
+        try {
+          await fetch(`/api/education/${id}/views`, { 
+            method: 'PATCH',
+            cache: 'no-store'
+          });
+        } catch (viewError) {
+          console.warn('Failed to track view:', viewError);
+        }
       } catch (e) {
         console.warn('API failed, using sample data:', e);
         // Fallback to sample data if API fails
@@ -128,6 +138,10 @@ export default function EducationDetailPage() {
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
                 {educationItem.instructor || 'تیم نورونکس'}
+              </div>
+              <div className="flex items-center gap-2">
+                <Eye className="w-4 h-4" />
+                کل بازدید: {educationItem.views || 0}
               </div>
               {educationItem.category && (
                 <div className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs">

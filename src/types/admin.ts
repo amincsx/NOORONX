@@ -14,6 +14,7 @@ export interface NewsItem {
     published: boolean;
     featured: boolean;
     tags: string[];
+    views?: number; // View count
 }
 
 export interface EducationItem {
@@ -36,6 +37,7 @@ export interface EducationItem {
     published: boolean;
     featured: boolean;
     tags: string[];
+    views?: number; // View count
 }
 
 export interface AdminFormData {

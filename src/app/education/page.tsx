@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import ResponsiveBackground from '@/components/ResponsiveBackground';
 import { dataStore } from '@/lib/dataStore';
 import { EducationItem } from '@/types/admin';
-import { Calendar, User, Clock, Star, PlayCircle } from 'lucide-react';
+import { Calendar, User, Clock, Star, PlayCircle, Eye } from 'lucide-react';
 
 export default function EducationPage() {
   const [educationItems, setEducationItems] = useState<EducationItem[]>([]);
@@ -170,6 +170,10 @@ export default function EducationPage() {
                             <span>{item.instructor}</span>
                           </div>
                         )}
+                        <div className="flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          <span>{item.views || 0}</span>
+                        </div>
                       </div>
                     </div>
 

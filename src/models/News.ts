@@ -13,6 +13,7 @@ const NewsSchema = new Schema(
     published: { type: Boolean, default: false },
     featured: { type: Boolean, default: false },
     tags: { type: [String], default: [] },
+    views: { type: Number, default: 0 },
   },
   { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );

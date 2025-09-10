@@ -15,7 +15,8 @@ const mockNewsData: NewsItem[] = [
         updatedAt: new Date('2024-01-15'),
         published: true,
         featured: true,
-        tags: ['نیروگاه خورشیدی', 'یزد', 'انرژی تجدیدپذیر']
+        tags: ['نیروگاه خورشیدی', 'یزد', 'انرژی تجدیدپذیر'],
+        views: 245
     },
     {
         id: '2',
@@ -30,7 +31,8 @@ const mockNewsData: NewsItem[] = [
         updatedAt: new Date('2024-01-10'),
         published: true,
         featured: false,
-        tags: ['فناوری', 'پنل خورشیدی', 'نوآوری']
+        tags: ['فناوری', 'پنل خورشیدی', 'نوآوری'],
+        views: 132
     }
 ];
 
@@ -51,7 +53,8 @@ const mockEducationData: EducationItem[] = [
         updatedAt: new Date('2024-01-01'),
         published: true,
         featured: true,
-        tags: ['مبانی', 'انرژی خورشیدی', 'مقدماتی']
+        tags: ['مبانی', 'انرژی خورشیدی', 'مقدماتی'],
+        views: 89
     }
 ];
 

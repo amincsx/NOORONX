@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import ResponsiveBackground from '@/components/ResponsiveBackground';
 import { NewsItem } from '@/types/admin';
 import { dataStore } from '@/lib/dataStore';
-import { Calendar, User } from 'lucide-react';
+import { Calendar, User, Eye } from 'lucide-react';
 
 export default function NewsPage() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
@@ -130,6 +130,10 @@ export default function NewsPage() {
                             <span>{item.author}</span>
                           </div>
                         )}
+                        <div className="flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          <span>{item.views || 0}</span>
+                        </div>
                       </div>
                     </div>
 

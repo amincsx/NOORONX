@@ -17,7 +17,14 @@ interface GlobalWithMongoose {
 
 const globalForMongoose = global as unknown as GlobalWithMongoose;
 
+let isMongoAvailable = true;
+
 export async function connectToDatabase(): Promise<typeof mongoose> {
+  // If we know MongoDB is not available, throw immediately
+  if (!isMongoAvailable) {
+    throw new Error('MongoDB not available - using mock database');
+  }
+
   if (globalForMongoose.mongooseConn) {
     return globalForMongoose.mongooseConn;
   }
@@ -26,8 +33,10 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
     console.log('Attempting MongoDB connection with URI:', MONGODB_URI ? 'URI is set' : 'URI is missing');
     globalForMongoose.mongoosePromise = mongoose.connect(MONGODB_URI, {
       dbName: process.env.MONGODB_DB || undefined,
+      serverSelectionTimeoutMS: 5000, // Fail fast for local testing
     }).catch((error) => {
       console.error('MongoDB connection failed:', error);
+      isMongoAvailable = false;
       throw error;
     });
   }
@@ -40,8 +49,13 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
     console.error('MongoDB connection error:', error);
     // Reset promise so next attempt can try again
     globalForMongoose.mongoosePromise = undefined;
+    isMongoAvailable = false;
     throw error;
   }
+}
+
+export function isMongoDBAvailable(): boolean {
+  return isMongoAvailable;
 }
 
 

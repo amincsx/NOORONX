@@ -1,0 +1,26 @@
+{
+  "news": [
+    {
+      "title": "cxvcxvcxvcxv",
+      "titleEn": "xcv",
+      "content": "xcv",
+      "contentEn": "xcv",
+      "excerpt": "xcv",
+      "excerptEn": "vcx",
+      "imageUrl": "",
+      "author": "cxv",
+      "published": true,
+      "featured": false,
+      "tags": [],
+      "_id": "mock_news_1_1757511872888",
+      "id": "mock_news_1_1757511872888",
+      "createdAt": "2025-09-10T13:44:32.888Z",
+      "updatedAt": "2025-09-10T13:44:32.888Z"
+    }
+  ],
+  "education": [],
+  "_counters": {
+    "news": 1,
+    "education": 0
+  }
+}

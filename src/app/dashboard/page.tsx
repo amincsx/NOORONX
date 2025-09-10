@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [apiError, setApiError] = useState('');
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [educationItems, setEducationItems] = useState<EducationItem[]>([]);
+  const [totalViews, setTotalViews] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'news' | 'education'>('overview');
   const [showForm, setShowForm] = useState<{
     show: boolean;
@@ -101,6 +102,19 @@ export default function Dashboard() {
     };
     loadEducation();
   }, [isAuthenticated]);
+
+  // Calculate total views whenever news or education items change
+  useEffect(() => {
+    const calculateTotalViews = () => {
+      const newsViews = newsItems.reduce((total, item) => total + (item.views || 0), 0);
+      const educationViews = educationItems.reduce((total, item) => total + (item.views || 0), 0);
+      setTotalViews(newsViews + educationViews);
+    };
+    
+    if (newsItems.length > 0 || educationItems.length > 0) {
+      calculateTotalViews();
+    }
+  }, [newsItems, educationItems]);
 
   const handleSaveContent = async (formData: AdminFormData) => {
     if (showForm.type === 'news') {
@@ -565,8 +579,8 @@ export default function Dashboard() {
                     <Eye className="w-4 h-4 text-purple-400" />
                   </div>
                 </div>
-                <div className="text-3xl font-bold text-white mb-1">12,543</div>
-                <p className="text-sm text-purple-400">+15.2% از ماه گذشته</p>
+                <div className="text-3xl font-bold text-white mb-1">{totalViews.toLocaleString('fa-IR')}</div>
+                <p className="text-sm text-purple-400">مجموع بازدید همه محتواها</p>
               </div>
             </div>
 

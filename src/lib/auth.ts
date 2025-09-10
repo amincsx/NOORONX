@@ -24,10 +24,11 @@ export function verifyCredentials(username: string, password: string): boolean {
   return username.trim() === DEFAULT_USERNAME && password.trim() === DEFAULT_PASSWORD;
 }
 
-export function setAuthCookie(username: string) {
+export async function setAuthCookie(username: string) {
   const value = `${username}|${Date.now()}`;
   const signed = sign(value);
-  cookies().set(AUTH_COOKIE, signed, {
+  const cookieStore = await cookies();
+  cookieStore.set(AUTH_COOKIE, signed, {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
@@ -36,12 +37,14 @@ export function setAuthCookie(username: string) {
   });
 }
 
-export function clearAuthCookie() {
-  cookies().set(AUTH_COOKIE, '', { httpOnly: true, path: '/', maxAge: 0 });
+export async function clearAuthCookie() {
+  const cookieStore = await cookies();
+  cookieStore.set(AUTH_COOKIE, '', { httpOnly: true, path: '/', maxAge: 0 });
 }
 
-export function isAuthenticated(): boolean {
-  const cookie = cookies().get(AUTH_COOKIE);
+export async function isAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get(AUTH_COOKIE);
   if (!cookie) return false;
   const raw = verify(cookie.value);
   if (!raw) return false;

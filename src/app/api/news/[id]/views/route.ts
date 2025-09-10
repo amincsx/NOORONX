@@ -5,9 +5,9 @@ import { mockDB } from '@/lib/mockDB';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     // Try MongoDB first

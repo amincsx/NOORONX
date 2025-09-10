@@ -190,57 +190,31 @@ export default function ContentForm({ type, item, onSave, onCancel }: ContentFor
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-white/80 mb-2">
-                                            توضیحات (فارسی)
+                                            خلاصه (فارسی)
                                         </label>
                                         <textarea
                                             rows={3}
                                             value={formData.description}
                                             onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                                             className="w-full p-3 bg-black/20 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-300"
-                                            placeholder="توضیحات دوره"
+                                            placeholder="خلاصه مطلب آموزشی"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-white/80 mb-2">
-                                            Description (English)
+                                            Summary (English)
                                         </label>
                                         <textarea
                                             rows={3}
                                             value={formData.descriptionEn}
                                             onChange={(e) => setFormData(prev => ({ ...prev, descriptionEn: e.target.value }))}
                                             className="w-full p-3 bg-black/20 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-300"
-                                            placeholder="Course description"
+                                            placeholder="Educational content summary"
                                         />
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">
-                                            مدت دوره
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={formData.duration}
-                                            onChange={(e) => setFormData(prev => ({ ...prev, duration: e.target.value }))}
-                                            className="w-full p-3 bg-black/20 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-300"
-                                            placeholder="مثال: ۸ ساعت"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">
-                                            سطح
-                                        </label>
-                                        <select
-                                            value={formData.level}
-                                            onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value as 'beginner' | 'intermediate' | 'advanced' }))}
-                                            className="w-full p-3 bg-black/20 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-300"
-                                        >
-                                            <option value="beginner">مقدماتی</option>
-                                            <option value="intermediate">متوسط</option>
-                                            <option value="advanced">پیشرفته</option>
-                                        </select>
-                                    </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-white/80 mb-2">
                                             دسته‌بندی
@@ -250,27 +224,26 @@ export default function ContentForm({ type, item, onSave, onCancel }: ContentFor
                                             value={formData.category}
                                             onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                                             className="w-full p-3 bg-black/20 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-300"
-                                            placeholder="مثال: مبانی"
+                                            placeholder="مثال: مبانی انرژی خورشیدی"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-white/80 mb-2">
+                                            نویسنده
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={formData.instructor}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, instructor: e.target.value }))}
+                                            className="w-full p-3 bg-black/20 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-300"
+                                            placeholder="نام نویسنده مطلب"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
                                     <label className="block text-sm font-medium text-white/80 mb-2">
-                                        مدرس
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={formData.instructor}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, instructor: e.target.value }))}
-                                        className="w-full p-3 bg-black/20 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-300"
-                                        placeholder="نام مدرس"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-white/80 mb-2">
-                                        لینک ویدیو
+                                        لینک ویدیو (اختیاری)
                                     </label>
                                     <input
                                         type="url"

@@ -512,7 +512,7 @@ export default function Dashboard() {
                   }`}
               >
                 <GraduationCap className="w-4 h-4" />
-                مدیریت آموزش
+                مطالب آموزشی
               </button>
             </div>
           </nav>
@@ -627,7 +627,7 @@ export default function Dashboard() {
                         </h4>
                         <p className="text-xs text-white/60">
                           {new Date(item.createdAt).toLocaleDateString('fa-IR')}
-                          {item.duration && ` • ${item.duration}`}
+                          {item.category && ` • ${item.category}`}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -703,7 +703,7 @@ export default function Dashboard() {
                   className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 hover-lift flex items-center gap-2 shadow-lg"
                 >
                   <Plus className="w-4 h-4" />
-                  افزودن آموزش جدید
+                  افزودن مطلب آموزشی
                 </button>
               </div>
             </div>

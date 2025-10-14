@@ -11,7 +11,7 @@ interface RouteParams {
 export async function GET(_req: Request, props: RouteParams) {
   try {
     const { id } = await props.params;
-    
+
     try {
       await connectToDatabase();
       const item = await News.findById(id).lean();
@@ -22,7 +22,7 @@ export async function GET(_req: Request, props: RouteParams) {
       const mockItem = await MockNews.findById(id);
       const item = await mockItem.lean();
       if (!item) return NextResponse.json({ message: 'Not found' }, { status: 404 });
-      return NextResponse.json(item, { 
+      return NextResponse.json(item, {
         status: 200,
         headers: { 'X-Database': 'mock' }
       });
@@ -38,7 +38,7 @@ export async function PUT(request: Request, props: RouteParams) {
     const { id } = await props.params;
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    
+
     const body = await request.json();
     const updateData = {
       $set: {
@@ -66,7 +66,7 @@ export async function PUT(request: Request, props: RouteParams) {
       const mockUpdated = await MockNews.findByIdAndUpdate(id, updateData, { new: true });
       const updated = await mockUpdated.lean();
       if (!updated) return NextResponse.json({ message: 'Not found' }, { status: 404 });
-      return NextResponse.json(updated, { 
+      return NextResponse.json(updated, {
         status: 200,
         headers: { 'X-Database': 'mock' }
       });
@@ -82,7 +82,7 @@ export async function DELETE(request: Request, props: RouteParams) {
     const { id } = await props.params;
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    
+
     try {
       await connectToDatabase();
       const res = await News.findByIdAndDelete(id).lean();
@@ -93,7 +93,7 @@ export async function DELETE(request: Request, props: RouteParams) {
       const mockDeleted = await MockNews.findByIdAndDelete(id);
       const res = await mockDeleted.lean();
       if (!res) return NextResponse.json({ message: 'Not found' }, { status: 404 });
-      return NextResponse.json({ success: true }, { 
+      return NextResponse.json({ success: true }, {
         status: 200,
         headers: { 'X-Database': 'mock' }
       });

@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const includeAll = searchParams.get('all') === '1';
-    
+
     try {
       await connectToDatabase();
       const query = includeAll ? {} : { published: true };
@@ -19,8 +19,8 @@ export async function GET(request: Request) {
       console.log('MongoDB not available, using mock database');
       const items = await MockNews.find(includeAll ? {} : { published: true });
       const results = await items.lean();
-      return NextResponse.json(results, { 
-        status: 200, 
+      return NextResponse.json(results, {
+        status: 200,
         headers: { 'X-Database': 'mock' }
       });
     }
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   try {
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    
+
     const body = await request.json();
     const newsData = {
       title: body.title,
@@ -58,8 +58,8 @@ export async function POST(request: Request) {
     } catch (mongoError) {
       console.log('MongoDB not available, using mock database');
       const created = await MockNews.create(newsData);
-      return NextResponse.json(created, { 
-        status: 201, 
+      return NextResponse.json(created, {
+        status: 201,
         headers: { 'X-Database': 'mock' }
       });
     }

@@ -112,6 +112,7 @@ export default function EnglishLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontFeatureSettings: '"lnum"', fontVariantNumeric: 'lining-nums' }}
         suppressHydrationWarning={true}
       >
         {children}

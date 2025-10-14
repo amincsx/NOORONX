@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const includeAll = searchParams.get('all') === '1';
     const query = includeAll ? {} : { published: true };
-    
+
     try {
       await connectToDatabase();
       const items = await Education.find(query).sort({ createdAt: -1 }).lean();
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
       console.log('MongoDB not available, using mock database for education');
       const mockItems = await MockEducation.find(query);
       const items = await mockItems.lean();
-      return NextResponse.json(items, { 
+      return NextResponse.json(items, {
         status: 200,
         headers: { 'X-Database': 'mock' }
       });
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   try {
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    
+
     const body = await request.json();
     const educationData = {
       title: body.title,
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     } catch (mongoError) {
       console.log('MongoDB not available, using mock database for education');
       const created = await MockEducation.create(educationData);
-      return NextResponse.json(created, { 
+      return NextResponse.json(created, {
         status: 201,
         headers: { 'X-Database': 'mock' }
       });

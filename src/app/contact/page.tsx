@@ -85,7 +85,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen relative">
       <ResponsiveBackground />
-      
+
       {/* Navigation */}
       <nav className="absolute top-18 sm:top-10 w-full flex justify-center sm:w-auto sm:justify-end sm:right-12 lg:right-20 z-[9999] gap-3 sm:gap-1 scale-90 sm:scale-110">
         <Link href="/" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full">
@@ -93,7 +93,7 @@ export default function ContactPage() {
           <span className="relative">صفحه اصلی</span>
         </Link>
       </nav>
-      
+
       {/* Header */}
       <div className="relative z-30 pt-32 sm:pt-20 pb-12">
         <div className="container mx-auto px-4 text-center">
@@ -110,7 +110,7 @@ export default function ContactPage() {
       <div className="relative z-20 pb-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            
+
             {/* Contact Form */}
             <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <Card variant="glass-strong" className="p-8">
@@ -120,7 +120,7 @@ export default function ContactPage() {
                     اطلاعات خود را وارد کنید تا کارشناسان ما در اسرع وقت با شما تماس بگیرند
                   </CardDescription>
                 </CardHeader>
-                
+
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -139,7 +139,7 @@ export default function ContactPage() {
                           placeholder="نام خود را وارد کنید"
                         />
                       </div>
-                      
+
                       <div>
                         <label htmlFor="email" className="block text-white/80 text-sm font-medium mb-2">
                           ایمیل *
@@ -173,7 +173,7 @@ export default function ContactPage() {
                           placeholder="شماره تماس خود را وارد کنید"
                         />
                       </div>
-                      
+
                       <div>
                         <label htmlFor="company" className="block text-white/80 text-sm font-medium mb-2">
                           نام شرکت

@@ -1,7 +1,6 @@
 "use client";
 
 import BackgroundVideo from "@/components/BackgroundVideo";
-import LogoVideo from "@/components/LogoVideo";
 import Footer from "@/components/Footer";
 import SimpleLanguageSelector from "@/components/SimpleLanguageSelector";
 import { useState, useEffect, useRef } from 'react';
@@ -9,6 +8,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NewsItem } from '@/types/admin';
 import { dataStore } from '@/lib/dataStore';
+import { toEnglishDigits } from '@/lib/utils';
 
 export default function Home() {
   const pathname = usePathname();
@@ -53,11 +53,12 @@ export default function Home() {
     const itemDate = new Date(date);
     const diffTime = Math.abs(now.getTime() - itemDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return '۱ روز پیش';
-    if (diffDays < 7) return `${diffDays} روز پیش`;
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} هفته پیش`;
-    return `${Math.ceil(diffDays / 30)} ماه پیش`;
+
+    // Always show English numbers
+    if (diffDays === 1) return toEnglishDigits('1 روز پیش');
+    if (diffDays < 7) return toEnglishDigits(`${diffDays} روز پیش`);
+    if (diffDays < 30) return toEnglishDigits(`${Math.ceil(diffDays / 7)} هفته پیش`);
+    return toEnglishDigits(`${Math.ceil(diffDays / 30)} ماه پیش`);
   };
 
   const truncateText = (text: string, maxLength: number) => {
@@ -153,14 +154,9 @@ export default function Home() {
 
   return (
     <>
-      {/* Fixed Logo and Navigation - Outside main container */}
-      {/* Logo with same structure as English version */}
-      <div className="absolute max-sm:top-4 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-4 left-13 z-[9999] animate-on-scroll">
-        <LogoVideo />
-      </div>
 
-      {/* Navigation - Desktop: Right side, Mobile: Center (like English) */}
-      <nav className="absolute top-12 right-8 max-sm:top-24 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 max-sm:right-auto z-[9999] animate-on-scroll" style={{ position: 'absolute', zIndex: 9999 }}>
+      {/* Navigation - Desktop: Right side, Mobile: Center */}
+      <nav className="absolute top-8 right-8 max-sm:top-8 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 max-sm:right-auto z-[9999] animate-on-scroll" style={{ position: 'absolute', zIndex: 9999 }}>
         <div className="glass rounded-2xl max-sm:p-2 max-sm:px-4 p-2">
           <div className="flex max-sm:gap-3 gap-2">
             <Link href="/design" className="text-white/70 max-sm:px-2 max-sm:py-1 px-4 py-2 max-sm:text-xs text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full whitespace-nowrap">
@@ -180,18 +176,90 @@ export default function Home() {
       </nav>
 
       {/* Simple Language Selector - Desktop: Right side, Mobile: Center (like English) */}
-      <div className="absolute top-15 right-[270px] z-[999999] animate-on-scroll max-sm:top-36 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
+      <div className="absolute top-11 right-[270px] z-[999999] animate-on-scroll max-sm:top-20 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
         <SimpleLanguageSelector currentLang={currentLanguage} />
       </div>
 
       <div className="min-h-screen relative">
         <BackgroundVideo />
 
+        {/* News Section - Adjusted size */}
+        <section className="relative z-10 py-40">
+          <div className="container mx-auto px-4">
+            <div className="glass-strong rounded-3xl p-4 sm:p-6">
+              <div className="text-center mb-6 animate-on-scroll">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow" style={{ direction: 'rtl', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
+                  آخرین اخبار و تحولات
+                </h2>
+                <p className="text-base text-white/60 mb-2" style={{ direction: 'rtl', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
+                  از جدیدترین تکنولوژی‌ها و پروژه‌های خورشیدی مطلع شوید
+                </p>
+                <Link
+                  href="/news"
+                  className="inline-block bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-yellow-500/30 transition-colors duration-300"
+                >
+                  مشاهده همه اخبار →
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {newsItems.length > 0 ? (
+                  newsItems.map((article, index) => (
+                    <article key={article.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                      <div className="relative h-32 overflow-hidden">
+                        <img
+                          src={article.imageUrl || "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop"}
+                          alt={article.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <span className="inline-block bg-yellow-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                            {article.tags?.[0] || 'خبر'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-yellow-400 transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-white/70 text-xs leading-relaxed mb-2">
+                          {truncateText(article.excerpt || article.content, 60)}
+                        </p>
+                        <Link href={`/news/${article.id || article._id}`} className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-xs font-medium">
+                          مطالعه کامل
+                        </Link>
+                      </div>
+                    </article>
+                  ))
+                ) : (
+                  // Fallback content when no news is available
+                  [1, 2, 3].map((index) => (
+                    <article key={index} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                      <div className="relative h-32 overflow-hidden">
+                        <div className="w-full h-full bg-gray-700/50 flex items-center justify-center">
+                          <span className="text-white/50">در حال بارگذاری...</span>
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <div className="h-4 bg-gray-700/50 rounded mb-2"></div>
+                        <div className="h-12 bg-gray-700/30 rounded mb-2"></div>
+                        <div className="h-6 bg-gray-700/20 rounded"></div>
+                      </div>
+                    </article>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+
         {/* Hero Section */}
-        <section className="relative z-30 min-h-screen flex items-center justify-center pt-130">
+        <section className="relative z-30 flex items-start justify-center pt-0 pb-50 min-h-0" style={{ marginTop: '-55px' }}>
           <div className="container mx-auto px-4 text-center">
             {/* Animated Solar Text */}
-            <div className="mb-8 mt-16 max-sm:mt-4 lg:mt-16 xl:mt-16 mt-4k animate-on-scroll">
+            <div className="mb-2 mt-2 max-sm:mt-0 lg:mt-2 xl:mt-2 mt-4k animate-on-scroll">
               <div className="glass rounded-2xl p-2 max-w-md mx-auto">
                 <div className="relative overflow-hidden p-2 group hover:scale-105 transition-all duration-500">
                   <div className="absolute top-1/4 left-1/4 w-1/4 h-1/2 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-0 group-hover:opacity-100"></div>
@@ -207,7 +275,6 @@ export default function Home() {
 
           </div>
         </section>
-
 
 
         {/* Features Section */}
@@ -250,90 +317,6 @@ export default function Home() {
           </div>
         </section>
 
-
-
-        {/* News Section */}
-        <section className="relative z-20 py-20">
-          <div className="container mx-auto px-4">
-            <div className="glass-strong rounded-3xl p-8 sm:p-12">
-              <div className="text-center mb-12 animate-on-scroll">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white/80 mb-6 text-shadow">
-                  آخرین{' '}
-                  <Link href="/news" className="text-yellow-400 hover:text-yellow-300">
-                    اخبار
-                  </Link>{' '}
-                  و تحولات
-                </h2>
-                <p className="text-xl text-white/60">
-                  از جدیدترین تکنولوژی‌ها و پروژه‌های خورشیدی مطلع شوید
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {newsItems.length > 0 ? newsItems.map((article, index) => (
-                  <article key={article.id} className="animate-on-scroll glass rounded-2xl overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                    <div className="relative h-48 overflow-hidden">
-                      <img 
-                        src={article.imageUrl || "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop"} 
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-yellow-500/90 text-white px-3 py-1 rounded-full text-sm font-medium">
-                          {article.tags?.[0] || 'خبر'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-white/90 mb-3 leading-tight hover:text-yellow-400 transition-colors">
-                        {article.title}
-                      </h3>
-                      <p className="text-white/70 text-sm leading-relaxed mb-4">
-                        {truncateText(article.excerpt || article.content, 120)}
-                      </p>
-                      
-                      <div className="flex items-center justify-between text-xs text-white/50 mb-4">
-                        <div className="flex items-center gap-4">
-                          <span>{formatDate(article.createdAt)}</span>
-                          {article.views && article.views > 0 && (
-                            <div className="flex items-center gap-1">
-                              <span>👁</span>
-                              <span>{article.views}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <Link href={`/news/${article.id || article._id}`}>
-                        <button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-4 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 group-hover:scale-105">
-                          مطالعه کامل
-                        </button>
-                      </Link>
-                    </div>
-                  </article>
-                )) : (
-                  // Fallback content when no news is available
-                  [1, 2, 3].map((index) => (
-                    <article key={index} className="animate-on-scroll glass rounded-2xl overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                      <div className="relative h-48 overflow-hidden">
-                        <div className="w-full h-full bg-gray-700/50 flex items-center justify-center">
-                          <span className="text-white/50">در حال بارگذاری...</span>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="h-6 bg-gray-700/50 rounded mb-3"></div>
-                        <div className="h-16 bg-gray-700/30 rounded mb-4"></div>
-                        <div className="h-8 bg-gray-700/20 rounded"></div>
-                      </div>
-                    </article>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
 
 
         {/* Contact CTA Section */}

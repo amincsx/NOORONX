@@ -28,7 +28,7 @@ export default function Dashboard() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
-    
+
     // Simple authentication check
     if (loginForm.username === 'mohammadrezazia' && loginForm.password === 'mohammadrezaziayektanoh') {
       setIsAuthenticated(true);
@@ -68,7 +68,7 @@ export default function Dashboard() {
   useEffect(() => {
     // Load data only when authenticated
     if (!isAuthenticated) return;
-    
+
     const loadNews = async () => {
       try {
         const res = await fetch('/api/news?all=1', { cache: 'no-store' });
@@ -110,7 +110,7 @@ export default function Dashboard() {
       const educationViews = educationItems.reduce((total, item) => total + (item.views || 0), 0);
       setTotalViews(newsViews + educationViews);
     };
-    
+
     if (newsItems.length > 0 || educationItems.length > 0) {
       calculateTotalViews();
     }
@@ -457,7 +457,7 @@ export default function Dashboard() {
                 <p className="text-xl text-white/60 max-w-3xl mx-auto">
                   مدیریت محتوای وب‌سایت انرژی خورشیدی
                 </p>
-                
+
                 {/* Logout Button and Test Button */}
                 <div className="mt-4 flex justify-center gap-4">
                   <button
@@ -493,259 +493,259 @@ export default function Dashboard() {
             </div>
           )}
 
-      {/* Navigation Tabs */}
-      <div className="relative z-20 mb-8">
-        <div className="container mx-auto px-4">
-          <nav className="flex justify-center">
-            <div className="glass rounded-xl p-2 flex space-x-2 space-x-reverse" dir="rtl">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`py-3 px-6 rounded-lg font-medium text-sm transition-all duration-300 flex items-center gap-2 ${activeTab === 'overview'
-                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                  }`}
-              >
-                <BarChart3 className="w-4 h-4" />
-                نمای کلی
-              </button>
-              <button
-                onClick={() => setActiveTab('news')}
-                className={`py-3 px-6 rounded-lg font-medium text-sm transition-all duration-300 flex items-center gap-2 ${activeTab === 'news'
-                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                  }`}
-              >
-                <Newspaper className="w-4 h-4" />
-                مدیریت اخبار
-              </button>
-              <button
-                onClick={() => setActiveTab('education')}
-                className={`py-3 px-6 rounded-lg font-medium text-sm transition-all duration-300 flex items-center gap-2 ${activeTab === 'education'
-                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                  }`}
-              >
-                <GraduationCap className="w-4 h-4" />
-                مطالب آموزشی
-              </button>
-            </div>
-          </nav>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <main className="relative z-20 container mx-auto px-4 pb-20">
-        {activeTab === 'overview' && (
-          <div className="space-y-8">
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="glass-strong rounded-xl p-6 hover-lift">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-white/70">کل اخبار</h3>
-                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <Newspaper className="w-4 h-4 text-blue-400" />
-                  </div>
+          {/* Navigation Tabs */}
+          <div className="relative z-20 mb-8">
+            <div className="container mx-auto px-4">
+              <nav className="flex justify-center">
+                <div className="glass rounded-xl p-2 flex space-x-2 space-x-reverse" dir="rtl">
+                  <button
+                    onClick={() => setActiveTab('overview')}
+                    className={`py-3 px-6 rounded-lg font-medium text-sm transition-all duration-300 flex items-center gap-2 ${activeTab === 'overview'
+                      ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
+                      : 'text-white/70 hover:text-white hover:bg-white/10'
+                      }`}
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    نمای کلی
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('news')}
+                    className={`py-3 px-6 rounded-lg font-medium text-sm transition-all duration-300 flex items-center gap-2 ${activeTab === 'news'
+                      ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
+                      : 'text-white/70 hover:text-white hover:bg-white/10'
+                      }`}
+                  >
+                    <Newspaper className="w-4 h-4" />
+                    مدیریت اخبار
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('education')}
+                    className={`py-3 px-6 rounded-lg font-medium text-sm transition-all duration-300 flex items-center gap-2 ${activeTab === 'education'
+                      ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
+                      : 'text-white/70 hover:text-white hover:bg-white/10'
+                      }`}
+                  >
+                    <GraduationCap className="w-4 h-4" />
+                    مطالب آموزشی
+                  </button>
                 </div>
-                <div className="text-3xl font-bold text-white mb-1">{totalNews}</div>
-                <p className="text-sm text-green-400">{publishedNews} منتشر شده</p>
-              </div>
-
-              <div className="glass-strong rounded-xl p-6 hover-lift">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-white/70">کل آموزش‌ها</h3>
-                  <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                    <GraduationCap className="w-4 h-4 text-green-400" />
-                  </div>
-                </div>
-                <div className="text-3xl font-bold text-white mb-1">{totalEducation}</div>
-                <p className="text-sm text-green-400">{publishedEducation} منتشر شده</p>
-              </div>
-
-              <div className="glass-strong rounded-xl p-6 hover-lift">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-white/70">محتوای ویژه</h3>
-                  <div className="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
-                    <Star className="w-4 h-4 text-yellow-400" />
-                  </div>
-                </div>
-                <div className="text-3xl font-bold text-white mb-1">{featuredNews + featuredEducation}</div>
-                <p className="text-sm text-yellow-400">{featuredNews} خبر، {featuredEducation} آموزش</p>
-              </div>
-
-              <div className="glass-strong rounded-xl p-6 hover-lift">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-white/70">کل بازدید</h3>
-                  <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <Eye className="w-4 h-4 text-purple-400" />
-                  </div>
-                </div>
-                <div className="text-3xl font-bold text-white mb-1">{totalViews.toLocaleString('fa-IR')}</div>
-                <p className="text-sm text-purple-400">مجموع بازدید همه محتواها</p>
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="glass-strong rounded-xl p-6">
-                <h2 className="text-xl font-bold text-white/90 mb-6 flex items-center gap-2">
-                  <Newspaper className="w-5 h-5 text-yellow-400" />
-                  آخرین اخبار
-                </h2>
-                <div className="space-y-4">
-                  {newsItems.slice(0, 3).map((item) => (
-                    <div key={item.id} className="flex items-start gap-3 p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-black/30 transition-all duration-300">
-                      <div className="w-2 h-2 bg-yellow-400 rounded-full mt-3 flex-shrink-0"></div>
-                      <div className="min-w-0 flex-1">
-                        <h4 className="text-sm font-medium text-white/90 mb-1">
-                          {item.title}
-                        </h4>
-                        <p className="text-xs text-white/60">
-                          {new Date(item.createdAt).toLocaleDateString('fa-IR')}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {item.published && (
-                          <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center">
-                            <Eye className="w-3 h-3 text-green-400" />
-                          </div>
-                        )}
-                        {item.featured && (
-                          <div className="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center">
-                            <Star className="w-3 h-3 text-yellow-400" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  {newsItems.length === 0 && (
-                    <div className="text-center py-8">
-                      <div className="text-4xl mb-4">📰</div>
-                      <p className="text-white/60">هنوز خبری اضافه نشده است</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="glass-strong rounded-xl p-6">
-                <h2 className="text-xl font-bold text-white/90 mb-6 flex items-center gap-2">
-                  <GraduationCap className="w-5 h-5 text-green-400" />
-                  آخرین آموزش‌ها
-                </h2>
-                <div className="space-y-4">
-                  {educationItems.slice(0, 3).map((item) => (
-                    <div key={item.id} className="flex items-start gap-3 p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-black/30 transition-all duration-300">
-                      <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
-                      <div className="min-w-0 flex-1">
-                        <h4 className="text-sm font-medium text-white/90 mb-1">
-                          {item.title}
-                        </h4>
-                        <p className="text-xs text-white/60">
-                          {new Date(item.createdAt).toLocaleDateString('fa-IR')}
-                          {item.category && ` • ${item.category}`}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {item.published && (
-                          <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center">
-                            <Eye className="w-3 h-3 text-green-400" />
-                          </div>
-                        )}
-                        {item.featured && (
-                          <div className="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center">
-                            <Star className="w-3 h-3 text-yellow-400" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  {educationItems.length === 0 && (
-                    <div className="text-center py-8">
-                      <div className="text-4xl mb-4">🎓</div>
-                      <p className="text-white/60">هنوز آموزشی اضافه نشده است</p>
-                    </div>
-                  )}
-                </div>
-              </div>
+              </nav>
             </div>
           </div>
-        )}
 
-        {activeTab === 'news' && (
-          <div className="space-y-6">
-            <div className="glass-strong rounded-xl p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white/90 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
-                    <Newspaper className="w-5 h-5 text-white" />
+          {/* Main Content */}
+          <main className="relative z-20 container mx-auto px-4 pb-20">
+            {activeTab === 'overview' && (
+              <div className="space-y-8">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="glass-strong rounded-xl p-6 hover-lift">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-medium text-white/70">کل اخبار</h3>
+                      <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                        <Newspaper className="w-4 h-4 text-blue-400" />
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-white mb-1">{totalNews}</div>
+                    <p className="text-sm text-green-400">{publishedNews} منتشر شده</p>
                   </div>
-                  مدیریت اخبار
-                </h2>
-                <button
-                  onClick={() => setShowForm({ show: true, type: 'news', item: null })}
-                  className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 hover-lift flex items-center gap-2 shadow-lg"
-                >
-                  <Plus className="w-4 h-4" />
-                  افزودن خبر جدید
-                </button>
-              </div>
-            </div>
-            <div className="glass-strong rounded-xl overflow-hidden">
-              <ContentList
-                type="news"
-                items={newsItems}
-                onEdit={(item) => setShowForm({ show: true, type: 'news', item })}
-                onDelete={(id) => handleDeleteContent('news', id)}
-                onTogglePublished={(id, published) => handleTogglePublished('news', id, published)}
-                onToggleFeatured={(id, featured) => handleToggleFeatured('news', id, featured)}
-              />
-            </div>
-          </div>
-        )}
 
-        {activeTab === 'education' && (
-          <div className="space-y-6">
-            <div className="glass-strong rounded-xl p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white/90 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-                    <GraduationCap className="w-5 h-5 text-white" />
+                  <div className="glass-strong rounded-xl p-6 hover-lift">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-medium text-white/70">کل آموزش‌ها</h3>
+                      <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                        <GraduationCap className="w-4 h-4 text-green-400" />
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-white mb-1">{totalEducation}</div>
+                    <p className="text-sm text-green-400">{publishedEducation} منتشر شده</p>
                   </div>
-                  مدیریت آموزش‌ها
-                </h2>
-                <button
-                  onClick={() => setShowForm({ show: true, type: 'education', item: null })}
-                  className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 hover-lift flex items-center gap-2 shadow-lg"
-                >
-                  <Plus className="w-4 h-4" />
-                  افزودن مطلب آموزشی
-                </button>
-              </div>
-            </div>
-            <div className="glass-strong rounded-xl overflow-hidden">
-              <ContentList
-                type="education"
-                items={educationItems}
-                onEdit={(item) => setShowForm({ show: true, type: 'education', item })}
-                onDelete={(id) => handleDeleteContent('education', id)}
-                onTogglePublished={(id, published) => handleTogglePublished('education', id, published)}
-                onToggleFeatured={(id, featured) => handleToggleFeatured('education', id, featured)}
-              />
-            </div>
-          </div>
-        )}
-      </main>
 
-      {/* Content Form Modal */}
-      {showForm.show && (
-        <ContentForm
-          type={showForm.type}
-          item={showForm.item}
-          onSave={handleSaveContent}
-          onCancel={() => setShowForm({ show: false, type: 'news' })}
-        />
+                  <div className="glass-strong rounded-xl p-6 hover-lift">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-medium text-white/70">محتوای ویژه</h3>
+                      <div className="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                        <Star className="w-4 h-4 text-yellow-400" />
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-white mb-1">{featuredNews + featuredEducation}</div>
+                    <p className="text-sm text-yellow-400">{featuredNews} خبر، {featuredEducation} آموزش</p>
+                  </div>
+
+                  <div className="glass-strong rounded-xl p-6 hover-lift">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-medium text-white/70">کل بازدید</h3>
+                      <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                        <Eye className="w-4 h-4 text-purple-400" />
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-white mb-1">{totalViews.toLocaleString('fa-IR')}</div>
+                    <p className="text-sm text-purple-400">مجموع بازدید همه محتواها</p>
+                  </div>
+                </div>
+
+                {/* Recent Activity */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="glass-strong rounded-xl p-6">
+                    <h2 className="text-xl font-bold text-white/90 mb-6 flex items-center gap-2">
+                      <Newspaper className="w-5 h-5 text-yellow-400" />
+                      آخرین اخبار
+                    </h2>
+                    <div className="space-y-4">
+                      {newsItems.slice(0, 3).map((item) => (
+                        <div key={item.id} className="flex items-start gap-3 p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-black/30 transition-all duration-300">
+                          <div className="w-2 h-2 bg-yellow-400 rounded-full mt-3 flex-shrink-0"></div>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="text-sm font-medium text-white/90 mb-1">
+                              {item.title}
+                            </h4>
+                            <p className="text-xs text-white/60">
+                              {new Date(item.createdAt).toLocaleDateString('fa-IR')}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {item.published && (
+                              <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center">
+                                <Eye className="w-3 h-3 text-green-400" />
+                              </div>
+                            )}
+                            {item.featured && (
+                              <div className="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                                <Star className="w-3 h-3 text-yellow-400" />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      {newsItems.length === 0 && (
+                        <div className="text-center py-8">
+                          <div className="text-4xl mb-4">📰</div>
+                          <p className="text-white/60">هنوز خبری اضافه نشده است</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="glass-strong rounded-xl p-6">
+                    <h2 className="text-xl font-bold text-white/90 mb-6 flex items-center gap-2">
+                      <GraduationCap className="w-5 h-5 text-green-400" />
+                      آخرین آموزش‌ها
+                    </h2>
+                    <div className="space-y-4">
+                      {educationItems.slice(0, 3).map((item) => (
+                        <div key={item.id} className="flex items-start gap-3 p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-black/30 transition-all duration-300">
+                          <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="text-sm font-medium text-white/90 mb-1">
+                              {item.title}
+                            </h4>
+                            <p className="text-xs text-white/60">
+                              {new Date(item.createdAt).toLocaleDateString('fa-IR')}
+                              {item.category && ` • ${item.category}`}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {item.published && (
+                              <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center">
+                                <Eye className="w-3 h-3 text-green-400" />
+                              </div>
+                            )}
+                            {item.featured && (
+                              <div className="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                                <Star className="w-3 h-3 text-yellow-400" />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      {educationItems.length === 0 && (
+                        <div className="text-center py-8">
+                          <div className="text-4xl mb-4">🎓</div>
+                          <p className="text-white/60">هنوز آموزشی اضافه نشده است</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'news' && (
+              <div className="space-y-6">
+                <div className="glass-strong rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-white/90 flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                        <Newspaper className="w-5 h-5 text-white" />
+                      </div>
+                      مدیریت اخبار
+                    </h2>
+                    <button
+                      onClick={() => setShowForm({ show: true, type: 'news', item: null })}
+                      className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 hover-lift flex items-center gap-2 shadow-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                      افزودن خبر جدید
+                    </button>
+                  </div>
+                </div>
+                <div className="glass-strong rounded-xl overflow-hidden">
+                  <ContentList
+                    type="news"
+                    items={newsItems}
+                    onEdit={(item) => setShowForm({ show: true, type: 'news', item })}
+                    onDelete={(id) => handleDeleteContent('news', id)}
+                    onTogglePublished={(id, published) => handleTogglePublished('news', id, published)}
+                    onToggleFeatured={(id, featured) => handleToggleFeatured('news', id, featured)}
+                  />
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'education' && (
+              <div className="space-y-6">
+                <div className="glass-strong rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-white/90 flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+                        <GraduationCap className="w-5 h-5 text-white" />
+                      </div>
+                      مدیریت آموزش‌ها
+                    </h2>
+                    <button
+                      onClick={() => setShowForm({ show: true, type: 'education', item: null })}
+                      className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 hover-lift flex items-center gap-2 shadow-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                      افزودن مطلب آموزشی
+                    </button>
+                  </div>
+                </div>
+                <div className="glass-strong rounded-xl overflow-hidden">
+                  <ContentList
+                    type="education"
+                    items={educationItems}
+                    onEdit={(item) => setShowForm({ show: true, type: 'education', item })}
+                    onDelete={(id) => handleDeleteContent('education', id)}
+                    onTogglePublished={(id, published) => handleTogglePublished('education', id, published)}
+                    onToggleFeatured={(id, featured) => handleToggleFeatured('education', id, featured)}
+                  />
+                </div>
+              </div>
+            )}
+          </main>
+
+          {/* Content Form Modal */}
+          {showForm.show && (
+            <ContentForm
+              type={showForm.type}
+              item={showForm.item}
+              onSave={handleSaveContent}
+              onCancel={() => setShowForm({ show: false, type: 'news' })}
+            />
+          )}
+        </>
       )}
-          </>
-        )}
     </div>
   );
 }

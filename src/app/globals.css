@@ -239,61 +239,6 @@ body {
   box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
 }
 
-/* Fixed Logo Styles */
-.fixed-logo {
-  position: relative !important;
-  top: 0 !important;
-  left: 0 !important;
-  z-index: 10000 !important;
-  transform: none !important;
-  scale: 1.4 !important;
-  will-change: auto !important;
-  backface-visibility: hidden !important;
-  perspective: 1000px !important;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-  pointer-events: auto !important;
-}
-
-/* Mobile centering - Simplified since we now use wrapper div positioning */
-@media (max-width: 640px) {
-  .fixed-logo {
-    position: relative !important;
-    top: 0 !important;
-    left: 0 !important;
-    transform: none !important;
-    scale: 1.4 !important;
-    margin: 0 !important;
-    z-index: 10000 !important;
-    /* Ensure no conflicting positioning */
-    right: unset !important;
-  }
-}
-
-/* English Logo Styles - Override positioning for English version */
-.english-logo .fixed-logo {
-  position: relative !important;
-  top: 0 !important;
-  left: 0 !important;
-  z-index: 10000 !important;
-  transform: none !important;
-  scale: 1.4 !important;
-  will-change: auto !important;
-  backface-visibility: hidden !important;
-  perspective: 1000px !important;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-  pointer-events: auto !important;
-}
-
-@media (min-width: 640px) {
-  .fixed-logo {
-    top: 5px !important;
-  }
-}
-
-/* Force fixed positioning */
-.fixed-logo * {
-  position: relative !important;
-}
 
 /* Loading States */
 .skeleton {
@@ -410,4 +355,104 @@ body {
     padding: 12px 16px !important;
     touch-action: manipulation !important;
   }
+}
+
+/* English Language Support - LTR Direction */
+html[lang="en"] {
+  direction: ltr !important;
+}
+
+html[lang="en"] body {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+html[lang="en"] * {
+  direction: ltr !important;
+}
+
+/* Ensure proper punctuation positioning for English */
+html[lang="en"] p,
+html[lang="en"] span,
+html[lang="en"] div,
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4,
+html[lang="en"] h5,
+html[lang="en"] h6 {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: normal !important;
+  font-feature-settings: "lnum" !important; /* Use Latin numbers */
+}
+
+/* Force English number formatting */
+html[lang="en"] * {
+  font-variant-numeric: lining-nums !important;
+}
+
+/* Comprehensive number formatting for English */
+html[lang="en"] * {
+  font-feature-settings: "lnum", "tnum" !important;
+  -webkit-font-feature-settings: "lnum", "tnum" !important;
+  -moz-font-feature-settings: "lnum", "tnum" !important;
+  -ms-font-feature-settings: "lnum", "tnum" !important;
+}
+
+/* Force all text content to use English digits */
+html[lang="en"] body * {
+  font-variant-numeric: normal !important;
+  font-feature-settings: "lnum" !important;
+}
+
+/* Fix punctuation and number positioning in English components */
+html[lang="en"] .text-gradient,
+html[lang="en"] .animate-on-scroll,
+html[lang="en"] .glass,
+html[lang="en"] .glass-strong,
+html[lang="en"] .prose {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Fix flex direction for English */
+html[lang="en"] .flex {
+  flex-direction: row !important;
+}
+
+/* Ensure proper text alignment for English content */
+html[lang="en"] .text-center {
+  text-align: center !important;
+}
+
+html[lang="en"] .text-left {
+  text-align: left !important;
+}
+
+html[lang="en"] .text-right {
+  text-align: right !important;
+}
+
+/* Ultra-aggressive number forcing for English pages */
+html[lang="en"] *::before,
+html[lang="en"] *::after,
+html[lang="en"] * {
+  font-variant-numeric: normal !important;
+  font-feature-settings: "lnum" !important;
+  -webkit-font-feature-settings: "lnum" !important;
+  -moz-font-feature-settings: "lnum" !important;
+  -ms-font-feature-settings: "lnum" !important;
+}
+
+/* Force all numbers to be English in English pages */
+html[lang="en"] body {
+  font-feature-settings: "lnum" !important;
+  font-variant-numeric: normal !important;
+}
+
+/* Override any potential RTL number formatting */
+html[lang="en"] * {
+  unicode-bidi: normal !important;
+  direction: ltr !important;
 }

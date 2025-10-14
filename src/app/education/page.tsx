@@ -193,7 +193,7 @@ export default function EducationPage() {
                     )}
                   </div>
 
-                  <Link 
+                  <Link
                     href={`/education/${item.id || (item as any)._id}`}
                     className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-4 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2 mt-auto"
                   >

@@ -1,11 +1,13 @@
 "use client";
 
 import BackgroundVideo from "@/components/BackgroundVideo";
-import LogoVideo from "@/components/LogoVideo";
 import Footer from "@/components/Footer";
 import SimpleLanguageSelector from "@/components/SimpleLanguageSelector";
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { NewsItem } from '@/types/admin';
+import { dataStore } from '@/lib/dataStore';
+import { toEnglishDigits } from '@/lib/utils';
 
 export default function EnglishHomePage() {
   const solarSentences = [
@@ -28,12 +30,148 @@ export default function EnglishHomePage() {
   const [scrollY, setScrollY] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showBottomSections, setShowBottomSections] = useState(false);
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
 
   // Intersection Observer for animations
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  const formatDate = (date: Date | string) => {
+    const now = new Date();
+    const itemDate = new Date(date);
+    const diffTime = Math.abs(now.getTime() - itemDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return toEnglishDigits(`${diffDays} days ago`);
+    if (diffDays < 30) return toEnglishDigits(`${Math.ceil(diffDays / 7)} weeks ago`);
+    return toEnglishDigits(`${Math.ceil(diffDays / 30)} months ago`);
+  };
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
   useEffect(() => {
     setIsLoaded(true);
+
+    // Aggressive number conversion function
+    const convertNumbersToEnglish = () => {
+      const persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+      // Convert all text nodes
+      const walker = document.createTreeWalker(
+        document.body,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+
+      let node;
+      while (node = walker.nextNode()) {
+        if (node.textContent && node.parentElement) {
+          let text = node.textContent;
+          let changed = false;
+
+          for (let i = 0; i < persian.length; i++) {
+            if (text.includes(persian[i])) {
+              text = text.replace(new RegExp(persian[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+
+          for (let i = 0; i < arabic.length; i++) {
+            if (text.includes(arabic[i])) {
+              text = text.replace(new RegExp(arabic[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+
+          if (changed) {
+            node.textContent = text;
+          }
+        }
+      }
+
+      // Also convert innerHTML of all elements
+      const allElements = document.querySelectorAll('*');
+      allElements.forEach(element => {
+        if (element.innerHTML) {
+          let html = element.innerHTML;
+          let changed = false;
+
+          for (let i = 0; i < persian.length; i++) {
+            if (html.includes(persian[i])) {
+              html = html.replace(new RegExp(persian[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+
+          for (let i = 0; i < arabic.length; i++) {
+            if (html.includes(arabic[i])) {
+              html = html.replace(new RegExp(arabic[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+
+          if (changed) {
+            element.innerHTML = html;
+          }
+        }
+      });
+    };
+
+    // Run conversion multiple times with different delays
+    setTimeout(convertNumbersToEnglish, 100);
+    setTimeout(convertNumbersToEnglish, 500);
+    setTimeout(convertNumbersToEnglish, 1000);
+    setTimeout(convertNumbersToEnglish, 2000);
+
+    // Set up MutationObserver to catch dynamic content
+    const observer = new MutationObserver(() => {
+      setTimeout(convertNumbersToEnglish, 100);
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    // Run conversion every 2 seconds to catch any missed numbers
+    const interval = setInterval(convertNumbersToEnglish, 2000);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Load latest news
+  useEffect(() => {
+    const loadNews = async () => {
+      try {
+        const res = await fetch('/api/news', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          // Get only published news and limit to 3 for homepage
+          const publishedNews = data.filter((item: NewsItem) => item.published);
+          setNewsItems(publishedNews.slice(0, 3));
+        } else {
+          // Fallback to local data
+          const allNews = dataStore.getNews();
+          const publishedNews = allNews.filter(item => item.published);
+          setNewsItems(publishedNews.slice(0, 3));
+        }
+      } catch {
+        // Fallback to local data
+        const allNews = dataStore.getNews();
+        const publishedNews = allNews.filter(item => item.published);
+        setNewsItems(publishedNews.slice(0, 3));
+      }
+    };
+    loadNews();
   }, []);
 
   // Typing effect for current sentence
@@ -94,14 +232,9 @@ export default function EnglishHomePage() {
 
   return (
     <>
-      {/* Fixed Logo and Navigation - Outside main container */}
-      {/* Logo moved to top left corner for English version */}
-      <div className="absolute max-sm:top-4 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-4 left-13 z-[9999] animate-on-scroll">
-        <LogoVideo />
-      </div>
 
       {/* Navigation moved to left side for English version */}
-      <nav className="absolute max-sm:top-24 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-8 left-8 z-[9999] animate-on-scroll" style={{ position: 'absolute', zIndex: 9999 }}>
+      <nav className="absolute max-sm:top-8 max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 top-8 left-8 z-[9999] animate-on-scroll" style={{ position: 'absolute', zIndex: 9999 }}>
         <div className="glass rounded-2xl max-sm:p-2 max-sm:px-4 p-2">
           <div className="flex max-sm:gap-3 gap-2">
             <Link href="/en/design" className="text-white/70 max-sm:px-2 max-sm:py-1 px-4 py-2 max-sm:text-xs text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full whitespace-nowrap">
@@ -121,25 +254,96 @@ export default function EnglishHomePage() {
       </nav>
 
       {/* Simple Language Selector - Desktop: Left side, Mobile: Center (like Farsi) */}
-      <div className="absolute top-12 left-[330px] z-[999999] animate-on-scroll max-sm:top-36 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
+      <div className="absolute top-12 left-[330px] z-[999999] animate-on-scroll max-sm:top-20 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
         <SimpleLanguageSelector currentLang="en" />
       </div>
 
-      <div className="min-h-screen relative">
+      <div className="min-h-screen relative overflow-x-hidden">
         <BackgroundVideo />
 
+        {/* News Section - Adjusted size and location to match Farsi version */}
+        <section className="relative z-10 py-40">
+          <div className="container mx-auto px-4">
+            <div className="glass-strong rounded-3xl p-4 sm:p-6">
+              <div className="text-center mb-6 animate-on-scroll">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow" style={{ direction: 'ltr', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
+                  Latest News and Developments
+                </h2>
+                <p className="text-base text-white/60 mb-2" style={{ direction: 'ltr', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
+                  Stay informed about the latest solar technologies and projects
+                </p>
+                <Link
+                  href="/en/news"
+                  className="inline-block bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-yellow-500/30 transition-colors duration-300"
+                >
+                  View All News →
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {newsItems.length > 0 ? (
+                  newsItems.map((article, index) => (
+                    <article key={article.id || article._id || index} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                      <div className="relative h-32 overflow-hidden">
+                        <img
+                          src={article.imageUrl || "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?w=400&h=300&fit=crop"}
+                          alt={article.titleEn || article.title}
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <span className="inline-block bg-yellow-400/90 text-black px-2 py-1 rounded-full text-xs font-medium">
+                            {article.tags?.[0] || 'Solar Energy'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-yellow-400 transition-colors">
+                          {article.titleEn || article.title}
+                        </h3>
+                        <p className="text-white/70 text-xs leading-relaxed mb-2">
+                          {truncateText(article.excerptEn || article.contentEn || article.excerpt || article.content, 60)}
+                        </p>
+                        <Link href={`/en/news/${article.id || article._id}`} className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-xs font-medium">
+                          Read More
+                        </Link>
+                      </div>
+                    </article>
+                  ))
+                ) : (
+                  // Fallback content when no news is available
+                  [1, 2, 3].map((index) => (
+                    <article key={index} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                      <div className="relative h-32 overflow-hidden">
+                        <div className="w-full h-full bg-gray-700/50 flex items-center justify-center">
+                          <span className="text-white/50">Loading...</span>
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <div className="h-4 bg-gray-700/50 rounded mb-2"></div>
+                        <div className="h-12 bg-gray-700/30 rounded mb-2"></div>
+                        <div className="h-6 bg-gray-700/20 rounded"></div>
+                      </div>
+                    </article>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Hero Section */}
-        <section className="relative z-30 min-h-screen flex items-center justify-center pt-130">
+        <section className="relative z-30 flex items-start justify-center pt-0 pb-50 min-h-0" style={{ marginTop: '-55px' }}>
           <div className="container mx-auto px-4 text-center">
             {/* Animated Solar Text */}
-            <div className="mb-8 mt-16 max-sm:mt-4 lg:mt-16 xl:mt-16 mt-4k animate-on-scroll">
+            <div className="mb-2 mt-2 max-sm:mt-0 lg:mt-2 xl:mt-2 mt-4k animate-on-scroll">
               <div className="glass rounded-2xl p-2 max-w-md mx-auto">
                 <div className="relative overflow-hidden p-2 group hover:scale-105 transition-all duration-500">
                   <div className="absolute top-1/4 left-1/4 w-1/4 h-1/2 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-0 group-hover:opacity-100"></div>
 
-                  <p className="relative text-white/80 text-sm sm:text-base lg:text-lg font-medium leading-relaxed tracking-wide min-h-[2em] group-hover:text-white transition-all duration-300 text-gradient">
+                  <p className="relative text-white/80 text-sm sm:text-base lg:text-lg font-medium leading-relaxed tracking-wide min-h-[2em] group-hover:text-white transition-all duration-300 text-gradient" style={{ direction: 'ltr', textAlign: 'left', fontFamily: "'B Nazanin', 'B Titr', 'B Mitra', 'Tahoma', 'Arial', sans-serif" }}>
                     {displayedText || ""}
-                    <span className={`inline-block w-1 h-[1.2em] bg-yellow-400 ml-2 ${isTyping ? 'animate-pulse' : 'opacity-0'}`}></span>
+                    <span className={`inline-block w-1 h-[1.2em] bg-yellow-400 ml-2 ${isTyping ? 'animate-pulse' : 'opacity-0'}`} style={{ direction: 'ltr' }}></span>
                   </p>
                 </div>
               </div>
@@ -151,12 +355,9 @@ export default function EnglishHomePage() {
         <section className="relative z-20 py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16 animate-on-scroll">
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white/80 mb-6 text-shadow-lg">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white/80 mb-6 text-shadow-lg" style={{ direction: 'ltr', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
                 Why Solar Energy?
               </h2>
-              <p className="text-xl text-white/60 max-w-3xl mx-auto">
-                Innovative solutions for a sustainable and cost-effective future
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -187,86 +388,14 @@ export default function EnglishHomePage() {
           </div>
         </section>
 
-        {/* News Section */}
-        <section className="relative z-20 py-20">
-          <div className="container mx-auto px-4">
-            <div className="glass-strong rounded-3xl p-8 sm:p-12">
-              <div className="text-center mb-12 animate-on-scroll">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white/80 mb-6 text-shadow">
-                  Latest News and Developments
-                </h2>
-                <p className="text-xl text-white/60">
-                  Stay informed about the latest solar technologies and projects
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {[
-                  {
-                    image: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?w=400&h=300&fit=crop",
-                    title: "Solar Panel Installation in 1000 New Homes",
-                    description: "A new solar panel installation project has begun in various regions of the country, and by the end of the year, more than 1000 homes will be equipped with solar energy...",
-                    category: "Solar Energy",
-                    date: "2 weeks ago"
-                  },
-                  {
-                    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop",
-                    title: "Opening of the Country's Largest Solar Farm",
-                    description: "The country's largest solar farm with a capacity to generate 50 megawatts of electricity was inaugurated in Yazd province. This project can provide electricity to 20,000 homes...",
-                    category: "Solar Farm",
-                    date: "1 month ago"
-                  },
-                  {
-                    image: "https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg?w=400&h=300&fit=crop",
-                    title: "New Solar Panel Technology with 30% Efficiency",
-                    description: "Iranian researchers have successfully developed new solar panels that increase energy conversion efficiency by up to 30%...",
-                    category: "Solar Technology",
-                    date: "3 weeks ago"
-                  }
-                ].map((article, index) => (
-                  <article key={index} className="animate-on-scroll glass rounded-2xl overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={article.image}
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <span className="inline-block bg-yellow-400/90 text-black px-3 py-1 rounded-full text-xs font-medium">
-                          {article.category}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs text-white/50">{article.date}</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-white/80 mb-3 leading-tight">
-                        {article.title}
-                      </h3>
-                      <p className="text-white/60 text-sm leading-relaxed mb-4">
-                        {article.description}
-                      </p>
-                      <button className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-sm font-medium">
-                        Read More →
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Contact CTA Section */}
         <section className="relative z-20 py-20">
           <div className="container mx-auto px-4 text-center">
             <div className="animate-on-scroll glass-strong rounded-3xl p-12 max-w-4xl mx-auto">
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white/80 mb-6 text-shadow-lg">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white/80 mb-6 text-shadow-lg" style={{ direction: 'ltr', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
                 Ready to Get Started?
               </h2>
-              <p className="text-xl text-white/60 mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-white/60 mb-8 max-w-2xl mx-auto" style={{ direction: 'ltr', textAlign: 'left', fontFeatureSettings: '"lnum"' }}>
                 Contact our experts today and get free consultation
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

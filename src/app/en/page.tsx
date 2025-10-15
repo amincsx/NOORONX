@@ -64,8 +64,7 @@ export default function EnglishHomePage() {
       const walker = document.createTreeWalker(
         document.body,
         NodeFilter.SHOW_TEXT,
-        null,
-        false
+        null
       );
 
       let node;
@@ -258,7 +257,7 @@ export default function EnglishHomePage() {
         <SimpleLanguageSelector currentLang="en" />
       </div>
 
-      <div className="min-h-screen relative overflow-x-hidden">
+      <div className="min-h-screen relative">
         <BackgroundVideo />
 
         {/* News Section - Adjusted size and location to match Farsi version */}

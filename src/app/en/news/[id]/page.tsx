@@ -57,94 +57,93 @@ export default function EnglishNewsDetailPage() {
             }
         };
         if (id) load();
-        
+
         // Aggressive number conversion function
         const convertNumbersToEnglish = () => {
-            const persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-            const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-            
+            const persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
             // Convert all text nodes
             const walker = document.createTreeWalker(
                 document.body,
                 NodeFilter.SHOW_TEXT,
-                null,
-                false
+                null
             );
-            
+
             let node;
             while (node = walker.nextNode()) {
                 if (node.textContent && node.parentElement) {
                     let text = node.textContent;
                     let changed = false;
-                    
+
                     for (let i = 0; i < persian.length; i++) {
                         if (text.includes(persian[i])) {
                             text = text.replace(new RegExp(persian[i], 'g'), i.toString());
                             changed = true;
                         }
                     }
-                    
+
                     for (let i = 0; i < arabic.length; i++) {
                         if (text.includes(arabic[i])) {
                             text = text.replace(new RegExp(arabic[i], 'g'), i.toString());
                             changed = true;
                         }
                     }
-                    
+
                     if (changed) {
                         node.textContent = text;
                     }
                 }
             }
-            
+
             // Also convert innerHTML of all elements
             const allElements = document.querySelectorAll('*');
             allElements.forEach(element => {
                 if (element.innerHTML) {
                     let html = element.innerHTML;
                     let changed = false;
-                    
+
                     for (let i = 0; i < persian.length; i++) {
                         if (html.includes(persian[i])) {
                             html = html.replace(new RegExp(persian[i], 'g'), i.toString());
                             changed = true;
                         }
                     }
-                    
+
                     for (let i = 0; i < arabic.length; i++) {
                         if (html.includes(arabic[i])) {
                             html = html.replace(new RegExp(arabic[i], 'g'), i.toString());
                             changed = true;
                         }
                     }
-                    
+
                     if (changed) {
                         element.innerHTML = html;
                     }
                 }
             });
         };
-        
+
         // Run conversion multiple times with different delays
         setTimeout(convertNumbersToEnglish, 100);
         setTimeout(convertNumbersToEnglish, 500);
         setTimeout(convertNumbersToEnglish, 1000);
         setTimeout(convertNumbersToEnglish, 2000);
-        
+
         // Set up MutationObserver to catch dynamic content
         const observer = new MutationObserver(() => {
             setTimeout(convertNumbersToEnglish, 100);
         });
-        
+
         observer.observe(document.body, {
             childList: true,
             subtree: true,
             characterData: true
         });
-        
+
         // Run conversion every 2 seconds to catch any missed numbers
         const interval = setInterval(convertNumbersToEnglish, 2000);
-        
+
         return () => {
             observer.disconnect();
             clearInterval(interval);

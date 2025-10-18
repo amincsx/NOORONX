@@ -83,10 +83,35 @@ export async function DELETE(request: Request, props: RouteParams) {
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
+    console.log('DELETE news - received ID:', id, 'type:', typeof id);
+
     try {
       await connectToDatabase();
+      
+      // First, try to find the item to see if it exists
+      const existingItem = await News.findById(id).lean();
+      console.log('DELETE news - existing item found:', Boolean(existingItem));
+      
+      if (!existingItem) {
+        // Try alternative search methods
+        const byStringId = await News.findOne({ id: id }).lean();
+        const byObjectId = await News.findOne({ _id: id }).lean();
+        console.log('DELETE news - byStringId:', Boolean(byStringId), 'byObjectId:', Boolean(byObjectId));
+        
+        return NextResponse.json({ 
+          message: 'Not found',
+          debug: {
+            searchedId: id,
+            foundByStringId: Boolean(byStringId),
+            foundByObjectId: Boolean(byObjectId)
+          }
+        }, { status: 404 });
+      }
+      
       const res = await News.findByIdAndDelete(id).lean();
-      if (!res) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+      if (!res) return NextResponse.json({ message: 'Delete failed' }, { status: 404 });
+      
+      console.log('DELETE news - successfully deleted:', id);
       return NextResponse.json({ success: true }, { status: 200 });
     } catch (mongoError) {
       console.log('MongoDB not available, using mock database');
@@ -100,7 +125,10 @@ export async function DELETE(request: Request, props: RouteParams) {
     }
   } catch (error) {
     console.error('DELETE /api/news/[id] error', error);
-    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+    return NextResponse.json({ 
+      message: 'Server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
   }
 }
 

@@ -1301,7 +1301,12 @@ export default function Dashboard() {
                                   مشاهده جزئیات
                                 </button>
                                 <button
-                                  onClick={() => handleDeleteConsultation(consultation.id || consultation._id)}
+                                  onClick={() => {
+                                    const consultationId = consultation.id || consultation._id;
+                                    if (consultationId) {
+                                      handleDeleteConsultation(consultationId);
+                                    }
+                                  }}
                                   className="bg-red-500/20 text-red-300 hover:bg-red-500/30 px-3 py-2 rounded-lg text-sm transition-all duration-300"
                                 >
                                   حذف

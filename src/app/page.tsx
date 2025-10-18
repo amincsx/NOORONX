@@ -6,7 +6,7 @@ import SimpleLanguageSelector from "@/components/SimpleLanguageSelector";
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { NewsItem } from '@/types/admin';
+import { NewsItem, EducationItem, ProductItem } from '@/types/admin';
 import { dataStore } from '@/lib/dataStore';
 import { toEnglishDigits } from '@/lib/utils';
 
@@ -44,6 +44,8 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showBottomSections, setShowBottomSections] = useState(false);
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [educationItems, setEducationItems] = useState<EducationItem[]>([]);
+  const [productItems, setProductItems] = useState<ProductItem[]>([]);
 
   // Intersection Observer for animations
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -70,30 +72,62 @@ export default function Home() {
     setIsLoaded(true);
   }, []);
 
-  // Load latest news
+  // Load latest news, education, and products
   useEffect(() => {
-    const loadNews = async () => {
+    const loadData = async () => {
       try {
-        const res = await fetch('/api/news', { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          // Get only published news and limit to 3 for homepage
-          const publishedNews = data.filter((item: NewsItem) => item.published);
-          setNewsItems(publishedNews.slice(0, 3));
+        // Fetch News
+        const newsRes = await fetch('/api/news', { cache: 'no-store' });
+        if (newsRes.ok) {
+          const newsData = await newsRes.json();
+          const publishedNews = newsData.filter((item: NewsItem) => item.published);
+          setNewsItems(publishedNews.slice(0, 1));
         } else {
-          // Fallback to local data
-          const allNews = dataStore.getNews();
+          const allNews = await dataStore.getNews();
           const publishedNews = allNews.filter(item => item.published);
-          setNewsItems(publishedNews.slice(0, 3));
+          setNewsItems(publishedNews.slice(0, 1));
         }
-      } catch {
-        // Fallback to local data
-        const allNews = dataStore.getNews();
+
+        // Fetch Education
+        const eduRes = await fetch('/api/education', { cache: 'no-store' });
+        if (eduRes.ok) {
+          const eduData = await eduRes.json();
+          const publishedEducation = eduData.filter((item: EducationItem) => item.published);
+          setEducationItems(publishedEducation.slice(0, 1));
+        } else {
+          const allEducation = await dataStore.getEducation();
+          const publishedEducation = allEducation.filter(item => item.published);
+          setEducationItems(publishedEducation.slice(0, 1));
+        }
+
+        // Fetch Products
+        const prodRes = await fetch('/api/products', { cache: 'no-store' });
+        if (prodRes.ok) {
+          const prodData = await prodRes.json();
+          const publishedProducts = prodData.filter((item: ProductItem) => item.published);
+          setProductItems(publishedProducts.slice(0, 1));
+        } else {
+          const allProducts = await dataStore.getProducts();
+          const publishedProducts = allProducts.filter(item => item.published);
+          setProductItems(publishedProducts.slice(0, 1));
+        }
+      } catch (error) {
+        console.error("Failed to load data, falling back to local store", error);
+        // Fallback for all
+        const allNews = await dataStore.getNews();
         const publishedNews = allNews.filter(item => item.published);
-        setNewsItems(publishedNews.slice(0, 3));
+        setNewsItems(publishedNews.slice(0, 1));
+
+        const allEducation = await dataStore.getEducation();
+        const publishedEducation = allEducation.filter(item => item.published);
+        setEducationItems(publishedEducation.slice(0, 1));
+
+        const allProducts = await dataStore.getProducts();
+        const publishedProducts = allProducts.filter(item => item.published);
+        setProductItems(publishedProducts.slice(0, 1));
       }
     };
-    loadNews();
+    loadData();
   }, []);
 
   // Typing effect for current sentence
@@ -167,6 +201,10 @@ export default function Home() {
               <div className="absolute top-1/4 left-1/4 w-1/4 h-1/2 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-out opacity-0 group-hover:opacity-100"></div>
               <span className="relative">درباره ما</span>
             </Link>
+            <Link href="/catalog" className="text-white/70 max-sm:px-2 max-sm:py-1 px-4 py-2 max-sm:text-xs text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full whitespace-nowrap">
+              <div className="absolute top-1/4 left-1/4 w-1/4 h-1/2 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-out opacity-0 group-hover:opacity-100"></div>
+              <span className="relative">محصولات</span>
+            </Link>
             <Link href="/education" className="text-white/70 max-sm:px-2 max-sm:py-1 px-4 py-2 max-sm:text-xs text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden rounded-full whitespace-nowrap">
               <div className="absolute top-1/4 left-1/4 w-1/4 h-1/2 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-out opacity-0 group-hover:opacity-100"></div>
               <span className="relative">آموزش</span>
@@ -176,80 +214,174 @@ export default function Home() {
       </nav>
 
       {/* Simple Language Selector - Desktop: Right side, Mobile: Center (like English) */}
-      <div className="absolute top-11 right-[270px] z-[999999] animate-on-scroll max-sm:top-20 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
+      <div className="absolute top-11 right-[350px] z-[999999] animate-on-scroll max-sm:top-20 max-sm:left-1/2 max-sm:right-auto max-sm:transform max-sm:-translate-x-1/2">
         <SimpleLanguageSelector currentLang={currentLanguage} />
       </div>
 
       <div className="min-h-screen relative">
         <BackgroundVideo />
 
-        {/* News Section - Adjusted size */}
+        {/* Content Sections */}
         <section className="relative z-10 py-40">
           <div className="container mx-auto px-4">
-            <div className="glass-strong rounded-3xl p-4 sm:p-6">
-              <div className="text-center mb-6 animate-on-scroll">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow" style={{ direction: 'rtl', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
-                  آخرین اخبار و تحولات
-                </h2>
-                <p className="text-base text-white/60 mb-2" style={{ direction: 'rtl', textAlign: 'center', fontFeatureSettings: '"lnum"' }}>
-                  از جدیدترین تکنولوژی‌ها و پروژه‌های خورشیدی مطلع شوید
-                </p>
-                <Link
-                  href="/news"
-                  className="inline-block bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-yellow-500/30 transition-colors duration-300"
-                >
-                  مشاهده همه اخبار →
-                </Link>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+              {/* News Section */}
+              <div className="glass-strong rounded-3xl p-4 sm:p-6 flex flex-col h-full">
+                <div className="text-center mb-6 animate-on-scroll">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow">آخرین اخبار</h2>
+                </div>
+                <div className="space-y-4 flex-grow">
+                  {newsItems.length > 0 ? (
+                    newsItems.map((article, index) => (
+                      <article key={article.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                        <div className="relative h-32 overflow-hidden">
+                          <img
+                            src={article.imageUrl || "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop"}
+                            alt={article.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                          <div className="absolute bottom-2 left-2 right-2">
+                            <span className="inline-block bg-yellow-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                              {article.tags?.[0] || 'خبر'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-3">
+                          <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-yellow-400 transition-colors">
+                            {article.title}
+                          </h3>
+                          <p className="text-white/70 text-xs leading-relaxed mb-2">
+                            {truncateText(article.excerpt || article.content, 60)}
+                          </p>
+                          <Link href={`/news/${article.id || article._id}`} className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-xs font-medium">
+                            مطالعه کامل
+                          </Link>
+                        </div>
+                      </article>
+                    ))
+                  ) : (
+                    <div className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift">
+                      <div className="relative h-32 overflow-hidden"><div className="w-full h-full bg-gray-700/50 flex items-center justify-center"><span className="text-white/50">در حال بارگذاری...</span></div></div>
+                      <div className="p-3"><div className="h-4 bg-gray-700/50 rounded mb-2"></div><div className="h-12 bg-gray-700/30 rounded mb-2"></div><div className="h-6 bg-gray-700/20 rounded"></div></div>
+                    </div>
+                  )}
+                </div>
+                <div className="text-center mt-6">
+                  <Link
+                    href="/news"
+                    className="inline-block bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-yellow-500/30 transition-colors duration-300"
+                  >
+                    مشاهده همه اخبار →
+                  </Link>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {newsItems.length > 0 ? (
-                  newsItems.map((article, index) => (
-                    <article key={article.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                      <div className="relative h-32 overflow-hidden">
-                        <img
-                          src={article.imageUrl || "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop"}
-                          alt={article.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div className="absolute bottom-2 left-2 right-2">
-                          <span className="inline-block bg-yellow-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
-                            {article.tags?.[0] || 'خبر'}
-                          </span>
+              {/* Education Section */}
+              <div className="glass-strong rounded-3xl p-4 sm:p-6 flex flex-col h-full">
+                <div className="text-center mb-6 animate-on-scroll">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow">جدیدترین آموزش</h2>
+                </div>
+                <div className="space-y-4 flex-grow">
+                  {educationItems.length > 0 ? (
+                    educationItems.map((item, index) => (
+                      <article key={item.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                        <div className="relative h-32 overflow-hidden">
+                          <img
+                            src={item.imageUrl || "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400&h=300&fit=crop"}
+                            alt={item.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                          <div className="absolute bottom-2 left-2 right-2">
+                            <span className="inline-block bg-blue-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                              {item.category || 'آموزش'}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="p-3">
-                        <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-yellow-400 transition-colors">
-                          {article.title}
-                        </h3>
-                        <p className="text-white/70 text-xs leading-relaxed mb-2">
-                          {truncateText(article.excerpt || article.content, 60)}
-                        </p>
-                        <Link href={`/news/${article.id || article._id}`} className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-xs font-medium">
-                          مطالعه کامل
-                        </Link>
-                      </div>
-                    </article>
-                  ))
-                ) : (
-                  // Fallback content when no news is available
-                  [1, 2, 3].map((index) => (
-                    <article key={index} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                      <div className="relative h-32 overflow-hidden">
-                        <div className="w-full h-full bg-gray-700/50 flex items-center justify-center">
-                          <span className="text-white/50">در حال بارگذاری...</span>
+                        <div className="p-3">
+                          <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-blue-400 transition-colors">
+                            {item.title}
+                          </h3>
+                          <p className="text-white/70 text-xs leading-relaxed mb-2">
+                            {truncateText(item.description, 60)}
+                          </p>
+                          <Link href={`/education/${item.id || item._id}`} className="text-blue-400 hover:text-blue-300 transition-colors duration-300 text-xs font-medium">
+                            مشاهده دوره
+                          </Link>
                         </div>
-                      </div>
-                      <div className="p-3">
-                        <div className="h-4 bg-gray-700/50 rounded mb-2"></div>
-                        <div className="h-12 bg-gray-700/30 rounded mb-2"></div>
-                        <div className="h-6 bg-gray-700/20 rounded"></div>
-                      </div>
-                    </article>
-                  ))
-                )}
+                      </article>
+                    ))
+                  ) : (
+                    <div className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift">
+                      <div className="relative h-32 overflow-hidden"><div className="w-full h-full bg-gray-700/50 flex items-center justify-center"><span className="text-white/50">در حال بارگذاری...</span></div></div>
+                      <div className="p-3"><div className="h-4 bg-gray-700/50 rounded mb-2"></div><div className="h-12 bg-gray-700/30 rounded mb-2"></div><div className="h-6 bg-gray-700/20 rounded"></div></div>
+                    </div>
+                  )}
+                </div>
+                <div className="text-center mt-6">
+                  <Link
+                    href="/education"
+                    className="inline-block bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-blue-500/30 transition-colors duration-300"
+                  >
+                    مشاهده همه آموزش‌ها →
+                  </Link>
+                </div>
               </div>
+
+              {/* Products Section */}
+              <div className="glass-strong rounded-3xl p-4 sm:p-6 flex flex-col h-full">
+                <div className="text-center mb-6 animate-on-scroll">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow">آخرین محصول</h2>
+                </div>
+                <div className="space-y-4 flex-grow">
+                  {productItems.length > 0 ? (
+                    productItems.map((product, index) => (
+                      <article key={product.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                        <div className="relative h-32 overflow-hidden">
+                          <img
+                            src={product.imageUrl || "https://images.unsplash.com/photo-1526657782461-9fe13402a841?w=400&h=300&fit=crop"}
+                            alt={product.name}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                          <div className="absolute bottom-2 left-2 right-2">
+                            <span className="inline-block bg-green-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                              {product.category || 'محصول'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-3">
+                          <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-green-400 transition-colors">
+                            {product.name}
+                          </h3>
+                          <p className="text-white/70 text-xs leading-relaxed mb-2">
+                            {truncateText(product.description, 60)}
+                          </p>
+                          <Link href={`/catalog`} className="text-green-400 hover:text-green-300 transition-colors duration-300 text-xs font-medium">
+                            مشاهده محصول
+                          </Link>
+                        </div>
+                      </article>
+                    ))
+                  ) : (
+                    <div className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift">
+                      <div className="relative h-32 overflow-hidden"><div className="w-full h-full bg-gray-700/50 flex items-center justify-center"><span className="text-white/50">در حال بارگذاری...</span></div></div>
+                      <div className="p-3"><div className="h-4 bg-gray-700/50 rounded mb-2"></div><div className="h-12 bg-gray-700/30 rounded mb-2"></div><div className="h-6 bg-gray-700/20 rounded"></div></div>
+                    </div>
+                  )}
+                </div>
+                <div className="text-center mt-6">
+                  <Link
+                    href="/catalog"
+                    className="inline-block bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-green-500/30 transition-colors duration-300"
+                  >
+                    مشاهده همه محصولات →
+                  </Link>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>

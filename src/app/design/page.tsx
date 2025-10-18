@@ -7,6 +7,8 @@ import { useState } from 'react';
 
 export default function DesignPage() {
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     // Installation Location
     address: '',
@@ -53,20 +55,93 @@ export default function DesignPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setShowConfirmation(true);
-    setTimeout(() => {
-      setShowConfirmation(false);
-      setFormData({
-        address: '', buildingType: '', ownership: '', installationType: '', area: '',
-        roofDirection: '', roofAngle: '', obstacles: '', roofMaterial: '',
-        monthlyConsumption: '', consumptionCategory: '', solarGoal: '', residents: '',
-        highConsumptionDevices: [], budget: '', budgetCategory: '', financing: '',
-        paybackPeriod: '', gridConnection: '', batteryStorage: '', systemType: '',
-        fullName: '', phone: '', email: '', contactPreference: ''
+
+    // Validate required fields (only fields that actually exist in the form)
+    const requiredFields = {
+      'address': 'آدرس',
+      'buildingType': 'نوع ساختمان',
+      'ownership': 'مالکیت',
+      'installationType': 'نوع نصب',
+      'area': 'مساحت',
+      'roofDirection': 'جهت بام',
+      'roofAngle': 'زاویه بام',
+      'monthlyConsumption': 'مصرف ماهانه',
+      'consumptionCategory': 'دسته مصرف',
+      'solarGoal': 'هدف از خورشیدی',
+      'residents': 'تعداد ساکنین',
+      'budget': 'بودجه',
+      'budgetCategory': 'دسته بودجه',
+      'financing': 'تامین مالی',
+      'paybackPeriod': 'دوره بازگشت سرمایه',
+      'fullName': 'نام کامل',
+      'phone': 'تلفن',
+      'contactPreference': 'روش تماس ترجیحی'
+    };
+
+    const missingFields = Object.keys(requiredFields).filter(field => {
+      const value = formData[field as keyof typeof formData];
+      return !value || (typeof value === 'string' && value.trim() === '') || (Array.isArray(value) && value.length === 0);
+    });
+
+    if (missingFields.length > 0) {
+      const missingFieldNames = missingFields.map(field => requiredFields[field as keyof typeof requiredFields]).join('، ');
+      setSubmitError(`فیلدهای زیر ضروری هستند: ${missingFieldNames}`);
+      console.log('Missing fields:', missingFields);
+      console.log('Form data:', formData);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      console.log('Submitting form with data:', formData);
+      const response = await fetch('/api/consultations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
       });
-    }, 3000);
+
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Form submitted successfully:', result);
+        setShowConfirmation(true);
+        setTimeout(() => {
+          setShowConfirmation(false);
+          setFormData({
+            address: '', buildingType: '', ownership: '', installationType: '', area: '',
+            roofDirection: '', roofAngle: '', obstacles: '', roofMaterial: '',
+            monthlyConsumption: '', consumptionCategory: '', solarGoal: '', residents: '',
+            highConsumptionDevices: [], budget: '', budgetCategory: '', financing: '',
+            paybackPeriod: '', gridConnection: '', batteryStorage: '', systemType: '',
+            fullName: '', phone: '', email: '', contactPreference: ''
+          });
+        }, 3000);
+      } else {
+        const errorText = await response.text();
+        console.error('API Error - Status:', response.status);
+        console.error('API Error - Response:', errorText);
+        try {
+          const errorData = JSON.parse(errorText);
+          setSubmitError(errorData.message || `خطا در ارسال فرم: ${response.status}`);
+        } catch {
+          setSubmitError(`خطا در ارسال فرم: ${response.status} - ${errorText}`);
+        }
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitError(`خطا در ارسال فرم: ${error instanceof Error ? error.message : 'خطای نامشخص'}`);
+      setSubmitError('خطا در ارسال فرم. لطفا اتصال اینترنت خود را بررسی کنید.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -104,7 +179,7 @@ export default function DesignPage() {
                     <textarea
                       value={formData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       rows={3}
                       placeholder="برای محاسبه تابش خورشید، شرایط اقلیمی، محدودیت‌های منطقه‌ای"
                     />
@@ -115,7 +190,7 @@ export default function DesignPage() {
                     <select
                       value={formData.buildingType}
                       onChange={(e) => handleInputChange('buildingType', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="villa">ویلایی</option>
@@ -132,7 +207,7 @@ export default function DesignPage() {
                     <select
                       value={formData.ownership}
                       onChange={(e) => handleInputChange('ownership', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="owner">مالک هستم</option>
@@ -152,7 +227,7 @@ export default function DesignPage() {
                     <select
                       value={formData.installationType}
                       onChange={(e) => handleInputChange('installationType', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="pitched">سقف شیروانی</option>
@@ -169,7 +244,7 @@ export default function DesignPage() {
                       type="number"
                       value={formData.area}
                       onChange={(e) => handleInputChange('area', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="عدد وارد کنید"
                     />
                   </div>
@@ -179,7 +254,7 @@ export default function DesignPage() {
                     <select
                       value={formData.roofDirection}
                       onChange={(e) => handleInputChange('roofDirection', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="south">جنوبی</option>
@@ -195,7 +270,7 @@ export default function DesignPage() {
                       type="number"
                       value={formData.roofAngle}
                       onChange={(e) => handleInputChange('roofAngle', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="مثلاً ۳۰"
                     />
                   </div>
@@ -213,7 +288,7 @@ export default function DesignPage() {
                       type="number"
                       value={formData.monthlyConsumption}
                       onChange={(e) => handleInputChange('monthlyConsumption', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="عدد دقیق"
                     />
                   </div>
@@ -223,7 +298,7 @@ export default function DesignPage() {
                     <select
                       value={formData.consumptionCategory}
                       onChange={(e) => handleInputChange('consumptionCategory', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="low">کم (زیر 200 کیلووات ساعت)</option>
@@ -237,7 +312,7 @@ export default function DesignPage() {
                     <select
                       value={formData.solarGoal}
                       onChange={(e) => handleInputChange('solarGoal', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="full">تأمین کامل برق</option>
@@ -254,7 +329,7 @@ export default function DesignPage() {
                       type="number"
                       value={formData.residents}
                       onChange={(e) => handleInputChange('residents', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="عدد"
                     />
                   </div>
@@ -272,7 +347,7 @@ export default function DesignPage() {
                       type="number"
                       value={formData.budget}
                       onChange={(e) => handleInputChange('budget', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="عدد"
                     />
                   </div>
@@ -282,7 +357,7 @@ export default function DesignPage() {
                     <select
                       value={formData.budgetCategory}
                       onChange={(e) => handleInputChange('budgetCategory', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="under50">کمتر از 50 میلیون</option>
@@ -297,7 +372,7 @@ export default function DesignPage() {
                     <select
                       value={formData.financing}
                       onChange={(e) => handleInputChange('financing', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="yes">بله</option>
@@ -311,7 +386,7 @@ export default function DesignPage() {
                     <select
                       value={formData.paybackPeriod}
                       onChange={(e) => handleInputChange('paybackPeriod', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="under3">کمتر از 3 سال</option>
@@ -333,7 +408,7 @@ export default function DesignPage() {
                       type="text"
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="نام و نام خانوادگی"
                       required
                     />
@@ -345,7 +420,7 @@ export default function DesignPage() {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="شماره تماس"
                       required
                     />
@@ -357,7 +432,7 @@ export default function DesignPage() {
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                       placeholder="ایمیل"
                     />
                   </div>
@@ -367,7 +442,7 @@ export default function DesignPage() {
                     <select
                       value={formData.contactPreference}
                       onChange={(e) => handleInputChange('contactPreference', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600 rounded-lg p-3 text-white text-right"
+                      className="w-full bg-gray-800 border border-gray-500 rounded-lg p-3 text-white text-right focus:border-yellow-400 focus:outline-none"
                     >
                       <option value="">انتخاب کنید</option>
                       <option value="phone">تلفنی</option>
@@ -378,15 +453,35 @@ export default function DesignPage() {
                 </div>
               </div>
 
+              {/* Error Display */}
+              {submitError && (
+                <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 text-red-300 text-center">
+                  {submitError}
+                </div>
+              )}
+
               {/* Submit Button */}
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="text-white/60 px-8 py-4 text-xl font-bold relative group transition-all duration-300 hover:text-white hover:scale-105 overflow-hidden"
+                  disabled={isSubmitting}
+                  className={`px-8 py-4 text-xl font-bold relative group transition-all duration-300 overflow-hidden ${isSubmitting
+                    ? 'text-white/40 cursor-not-allowed'
+                    : 'text-white/60 hover:text-white hover:scale-105'
+                    }`}
                 >
                   {/* Sliding background animation - only comes in */}
                   <div className="absolute top-1/4 left-1/4 w-1/4 h-1/2 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-out opacity-0 group-hover:opacity-100"></div>
-                  <span className="relative">ارسال درخواست مشاوره</span>
+                  <span className="relative">
+                    {isSubmitting ? (
+                      <>
+                        <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2"></span>
+                        در حال ارسال...
+                      </>
+                    ) : (
+                      'ارسال درخواست مشاوره'
+                    )}
+                  </span>
                 </button>
               </div>
             </form>

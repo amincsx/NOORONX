@@ -8,7 +8,8 @@
   --accent: #fde047;
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
-  --glass-bg: rgba(0, 0, 0, 0.2);
+  --glass-bg: rgba(0, 0, 0, 0.3);
+  /* Less transparent */
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
@@ -164,14 +165,17 @@ body {
 /* Glass Morphism */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(30px);
+  /* More blur */
   border: 1px solid var(--glass-border);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .glass-strong {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(30px);
+  background: rgba(0, 0, 0, 0.5);
+  /* Less transparent */
+  backdrop-filter: blur(40px);
+  /* More blur */
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
@@ -384,7 +388,8 @@ html[lang="en"] h6 {
   direction: ltr !important;
   text-align: left !important;
   unicode-bidi: normal !important;
-  font-feature-settings: "lnum" !important; /* Use Latin numbers */
+  font-feature-settings: "lnum" !important;
+  /* Use Latin numbers */
 }
 
 /* Force English number formatting */

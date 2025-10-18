@@ -38,7 +38,7 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
 
   if (!globalForMongoose.mongoosePromise) {
     console.log('Attempting MongoDB connection with URI:', MONGODB_URI ? 'URI is set' : 'URI is missing');
-    
+
     const connectionOptions: any = {
       dbName: process.env.MONGODB_DB || undefined,
     };
@@ -71,11 +71,11 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
     console.error('MongoDB connection error:', error);
     // Reset promise so next attempt can try again
     globalForMongoose.mongoosePromise = undefined;
-    
+
     if (NODE_ENV === 'development') {
       isMongoAvailable = false;
     }
-    
+
     throw error;
   }
 }

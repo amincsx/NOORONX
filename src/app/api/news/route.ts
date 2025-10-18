@@ -15,22 +15,22 @@ export async function GET(request: Request) {
       await connectToDatabase();
       const query = includeAll ? {} : { published: true };
       const items = await News.find(query).sort({ createdAt: -1 }).lean();
-      return NextResponse.json(items, { 
+      return NextResponse.json(items, {
         status: 200,
         headers: { 'X-Database': 'mongodb' }
       });
     } catch (mongoError) {
       console.log('MongoDB not available:', mongoError);
-      
+
       // In production, don't fall back to mock data - return error instead
       if (NODE_ENV === 'production') {
         console.error('Production database connection failed - this should not happen');
         return NextResponse.json(
-          { message: 'Database connection failed', error: 'MongoDB unavailable' }, 
+          { message: 'Database connection failed', error: 'MongoDB unavailable' },
           { status: 503 }
         );
       }
-      
+
       // In development, fall back to mock database
       console.log('Using mock database for development');
       const items = await MockNews.find(includeAll ? {} : { published: true });
@@ -72,22 +72,22 @@ export async function POST(request: Request) {
     try {
       await connectToDatabase();
       const created = await News.create(newsData);
-      return NextResponse.json(created, { 
+      return NextResponse.json(created, {
         status: 201,
         headers: { 'X-Database': 'mongodb' }
       });
     } catch (mongoError) {
       console.log('MongoDB not available:', mongoError);
-      
+
       // In production, don't fall back to mock data
       if (NODE_ENV === 'production') {
         console.error('Production database connection failed during POST');
         return NextResponse.json(
-          { message: 'Database connection failed', error: 'MongoDB unavailable' }, 
+          { message: 'Database connection failed', error: 'MongoDB unavailable' },
           { status: 503 }
         );
       }
-      
+
       // In development, fall back to mock database
       console.log('Using mock database for development');
       const created = await MockNews.create(newsData);

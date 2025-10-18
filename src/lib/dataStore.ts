@@ -1,4 +1,4 @@
-import { NewsItem, EducationItem } from '@/types/admin';
+import { NewsItem, EducationItem, ProductItem } from '@/types/admin';
 
 // Mock data for development
 const mockNewsData: NewsItem[] = [
@@ -58,9 +58,29 @@ const mockEducationData: EducationItem[] = [
     }
 ];
 
+const mockProductData: ProductItem[] = [
+    {
+        id: '1',
+        name: 'پنل خورشیدی 550 وات',
+        nameEn: '550W Solar Panel',
+        description: 'پنل خورشیدی مونوکریستال با بازدهی بالا.',
+        descriptionEn: 'High-efficiency monocrystalline solar panel.',
+        price: 5000000,
+        category: 'پنل‌ها',
+        categoryEn: 'Panels',
+        stock: 100,
+        createdAt: new Date('2024-02-01'),
+        updatedAt: new Date('2024-02-01'),
+        published: true,
+        featured: true,
+        tags: ['پنل', '550 وات', 'مونوکریستال']
+    }
+];
+
 class DataStore {
     private newsKey = 'nooronx_news';
     private educationKey = 'nooronx_education';
+    private productsKey = 'nooronx_products';
 
     // News methods
     getNews(): NewsItem[] {
@@ -163,13 +183,71 @@ class DataStore {
     }
 
     deleteEducationItem(id: string): boolean {
-        const education = this.getEducation();
-        const filtered = education.filter(item => item.id !== id);
+        let education = this.getEducation();
+        const initialLength = education.length;
+        education = education.filter(item => item.id !== id);
 
-        if (filtered.length === education.length) return false;
+        if (education.length < initialLength) {
+            this.saveEducation(education);
+            return true;
+        }
+        return false;
+    }
 
-        this.saveEducation(filtered);
-        return true;
+    // Product methods
+    getProducts(): ProductItem[] {
+        if (typeof window === 'undefined') return mockProductData;
+
+        const stored = localStorage.getItem(this.productsKey);
+        return stored ? JSON.parse(stored) : mockProductData;
+    }
+
+    saveProducts(products: ProductItem[]): void {
+        if (typeof window === 'undefined') return;
+
+        localStorage.setItem(this.productsKey, JSON.stringify(products));
+    }
+
+    addProductItem(item: Omit<ProductItem, 'id' | 'createdAt' | 'updatedAt'>): ProductItem {
+        const products = this.getProducts();
+        const newItem: ProductItem = {
+            ...item,
+            id: Date.now().toString(),
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
+
+        products.unshift(newItem);
+        this.saveProducts(products);
+        return newItem;
+    }
+
+    updateProductItem(id: string, updates: Partial<ProductItem>): ProductItem | null {
+        const products = this.getProducts();
+        const index = products.findIndex(item => item.id === id);
+
+        if (index === -1) return null;
+
+        products[index] = {
+            ...products[index],
+            ...updates,
+            updatedAt: new Date()
+        };
+
+        this.saveProducts(products);
+        return products[index];
+    }
+
+    deleteProductItem(id: string): boolean {
+        let products = this.getProducts();
+        const initialLength = products.length;
+        products = products.filter(item => item.id !== id);
+
+        if (products.length < initialLength) {
+            this.saveProducts(products);
+            return true;
+        }
+        return false;
     }
 }
 

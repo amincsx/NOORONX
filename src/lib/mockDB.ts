@@ -10,9 +10,11 @@ const DB_FILE = path.join(process.cwd(), 'local-db.json');
 interface MockDB {
     news: any[];
     education: any[];
+    products: any[];
     _counters: {
         news: number;
         education: number;
+        products: number;
     };
 }
 
@@ -21,13 +23,18 @@ class MockDatabase {
         try {
             await access(DB_FILE, constants.F_OK);
             const content = await readFile(DB_FILE, 'utf-8');
-            return JSON.parse(content);
+            const db = JSON.parse(content);
+            // Ensure products and its counter exist
+            if (!db.products) db.products = [];
+            if (!db._counters.products) db._counters.products = 0;
+            return db;
         } catch {
             // File doesn't exist, create initial structure
             const initialDB: MockDB = {
                 news: [],
                 education: [],
-                _counters: { news: 0, education: 0 }
+                products: [],
+                _counters: { news: 0, education: 0, products: 0 }
             };
             await writeFile(DB_FILE, JSON.stringify(initialDB, null, 2));
             return initialDB;
@@ -38,7 +45,7 @@ class MockDatabase {
         await writeFile(DB_FILE, JSON.stringify(db, null, 2));
     }
 
-    async find(collection: 'news' | 'education', query: any = {}): Promise<any[]> {
+    async find(collection: 'news' | 'education' | 'products', query: any = {}): Promise<any[]> {
         const db = await this.ensureDBFile();
         let items = db[collection] || [];
 
@@ -50,13 +57,13 @@ class MockDatabase {
         return items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
 
-    async findById(collection: 'news' | 'education', id: string): Promise<any | null> {
+    async findById(collection: 'news' | 'education' | 'products', id: string): Promise<any | null> {
         const db = await this.ensureDBFile();
         const items = db[collection] || [];
         return items.find(item => item._id === id || item.id === id) || null;
     }
 
-    async create(collection: 'news' | 'education', data: any): Promise<any> {
+    async create(collection: 'news' | 'education' | 'products', data: any): Promise<any> {
         const db = await this.ensureDBFile();
 
         // Generate ID
@@ -78,7 +85,7 @@ class MockDatabase {
         return newItem;
     }
 
-    async findByIdAndUpdate(collection: 'news' | 'education', id: string, updateData: any): Promise<any | null> {
+    async findByIdAndUpdate(collection: 'news' | 'education' | 'products', id: string, updateData: any): Promise<any | null> {
         const db = await this.ensureDBFile();
         const items = db[collection];
         const index = items.findIndex(item => item._id === id || item.id === id);
@@ -111,7 +118,7 @@ class MockDatabase {
         return updated;
     }
 
-    async findByIdAndDelete(collection: 'news' | 'education', id: string): Promise<any | null> {
+    async findByIdAndDelete(collection: 'news' | 'education' | 'products', id: string): Promise<any | null> {
         const db = await this.ensureDBFile();
         const items = db[collection];
         const index = items.findIndex(item => item._id === id || item.id === id);
@@ -129,7 +136,7 @@ export const mockDB = new MockDatabase();
 
 // Mock Mongoose-like interface
 export class MockModel {
-    constructor(private collection: 'news' | 'education') { }
+    constructor(private collection: 'news' | 'education' | 'products') { }
 
     async find(query: any = {}) {
         const results = await mockDB.find(this.collection, query);
@@ -167,3 +174,4 @@ export class MockModel {
 
 export const MockNews = new MockModel('news');
 export const MockEducation = new MockModel('education');
+export const MockProducts = new MockModel('products');

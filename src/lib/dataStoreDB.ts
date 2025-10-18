@@ -1,4 +1,4 @@
-import { NewsItem, EducationItem } from '@/types/admin';
+import { NewsItem, EducationItem, ProductItem } from '@/types/admin';
 
 class DataStore {
     // News methods
@@ -171,6 +171,93 @@ class DataStore {
             return response.ok;
         } catch (error) {
             console.error('Error deleting education item:', error);
+            return false;
+        }
+    }
+
+    // Product methods
+    async getProducts(): Promise<ProductItem[]> {
+        try {
+            const response = await fetch('/api/products?all=1');
+            if (!response.ok) {
+                throw new Error('Failed to fetch products');
+            }
+            const data = await response.json();
+            return data.map((item: any) => ({
+                ...item,
+                id: item._id,
+                createdAt: new Date(item.createdAt),
+                updatedAt: new Date(item.updatedAt)
+            }));
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            return [];
+        }
+    }
+
+    async addProductItem(item: Omit<ProductItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<ProductItem | null> {
+        try {
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(item)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create product item');
+            }
+
+            const data = await response.json();
+            return {
+                ...data,
+                id: data._id,
+                createdAt: new Date(data.createdAt),
+                updatedAt: new Date(data.updatedAt)
+            };
+        } catch (error) {
+            console.error('Error creating product item:', error);
+            return null;
+        }
+    }
+
+    async updateProductItem(id: string, updates: Partial<ProductItem>): Promise<ProductItem | null> {
+        try {
+            const response = await fetch(`/api/products/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updates)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update product item');
+            }
+
+            const data = await response.json();
+            return {
+                ...data,
+                id: data._id,
+                createdAt: new Date(data.createdAt),
+                updatedAt: new Date(data.updatedAt)
+            };
+        } catch (error) {
+            console.error('Error updating product item:', error);
+            return null;
+        }
+    }
+
+    async deleteProductItem(id: string): Promise<boolean> {
+        try {
+            const response = await fetch(`/api/products/${id}`, {
+                method: 'DELETE'
+            });
+
+            return response.ok;
+        } catch (error) {
+            console.error('Error deleting product item:', error);
             return false;
         }
     }

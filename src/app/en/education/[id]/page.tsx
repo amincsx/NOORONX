@@ -33,7 +33,6 @@ export default function EducationDetailPage() {
                     });
                     if (viewRes.ok) {
                         const viewData = await viewRes.json();
-                        // Update the view count in the current item
                         setEducationItem(prev => prev ? { ...prev, views: viewData.views } : null);
                     }
                 } catch (viewError) {
@@ -41,7 +40,6 @@ export default function EducationDetailPage() {
                 }
             } catch (e) {
                 console.warn('API failed, using sample data:', e);
-                // Fallback to sample data if API fails
                 const sampleEducation = dataStore.getEducation().find(item =>
                     item.id === id || (item as any)._id === id
                 );
@@ -54,7 +52,7 @@ export default function EducationDetailPage() {
     }, [id]);
 
     const formatDate = (date: Date | string) => {
-        return new Date(date).toLocaleDateString('fa-IR', {
+        return new Date(date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
@@ -67,7 +65,7 @@ export default function EducationDetailPage() {
                 <ResponsiveBackground />
                 <div className="text-white text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-                    <p>در حال بارگذاری...</p>
+                    <p>Loading...</p>
                 </div>
             </div>
         );
@@ -78,9 +76,9 @@ export default function EducationDetailPage() {
             <div className="min-h-screen relative flex items-center justify-center">
                 <ResponsiveBackground />
                 <div className="text-white text-center">
-                    <p className="mb-4">مطلب آموزشی مورد نظر یافت نشد</p>
-                    <Link href="/education" className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300">
-                        بازگشت به آموزش
+                    <p className="mb-4">Education content not found</p>
+                    <Link href="/en/education" className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-300">
+                        Back to Education
                     </Link>
                 </div>
             </div>
@@ -92,25 +90,25 @@ export default function EducationDetailPage() {
             <ResponsiveBackground />
 
             {/* Navigation */}
-            <nav className="absolute top-18 sm:top-10 w-full flex justify-center sm:w-auto sm:justify-end sm:right-12 lg:right-20 z-20 gap-3 sm:gap-1 scale-90 sm:scale-110">
-                <Link href="/" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
-                    <span className="relative z-10">خانه</span>
+            <nav className="absolute top-18 sm:top-10 w-full flex justify-center sm:w-auto sm:justify-start sm:left-12 lg:left-20 z-20 gap-3 sm:gap-1 scale-90 sm:scale-110">
+                <Link href="/en" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
+                    <span className="relative z-10">Home</span>
                     <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                 </Link>
-                <Link href="/news" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
-                    <span className="relative z-10">اخبار</span>
+                <Link href="/en/news" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
+                    <span className="relative z-10">News</span>
                     <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                 </Link>
-                <Link href="/education" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
-                    <span className="relative z-10">آموزش</span>
+                <Link href="/en/education" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
+                    <span className="relative z-10">Education</span>
                     <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                 </Link>
-                <Link href="/services/consultation" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
-                    <span className="relative z-10">خدمات</span>
+                <Link href="/en/services/consultation" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
+                    <span className="relative z-10">Services</span>
                     <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                 </Link>
-                <Link href="/contact" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
-                    <span className="relative z-10">تماس</span>
+                <Link href="/en/contact" className="text-white/60 px-4 py-2 text-sm font-medium relative group transition-all duration-300 hover:text-white hover:scale-105">
+                    <span className="relative z-10">Contact</span>
                     <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                 </Link>
             </nav>
@@ -120,11 +118,11 @@ export default function EducationDetailPage() {
                 {/* Back Button */}
                 <div className="mb-8">
                     <Link
-                        href="/education"
+                        href="/en/education"
                         className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-all duration-300 group"
                     >
                         <ArrowRight className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                        بازگشت به آموزش
+                        Back to Education
                     </Link>
                 </div>
 
@@ -132,7 +130,7 @@ export default function EducationDetailPage() {
                     {/* Header */}
                     <div className="glass-strong rounded-2xl p-8 mb-8">
                         <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-relaxed">
-                            {educationItem.title}
+                            {educationItem.titleEn || educationItem.title}
                         </h1>
 
                         <div className="flex flex-wrap items-center gap-6 text-white/60 text-sm mb-6">
@@ -142,11 +140,11 @@ export default function EducationDetailPage() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <User className="w-4 h-4" />
-                                {educationItem.instructor || 'تیم نورونکس'}
+                                {educationItem.instructor || 'NOORONX Team'}
                             </div>
                             <div className="flex items-center gap-2">
                                 <Eye className="w-4 h-4" />
-                                کل بازدید: {educationItem.views || 0}
+                                Views: {educationItem.views || 0}
                             </div>
                             {educationItem.category && (
                                 <div className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs">
@@ -155,14 +153,14 @@ export default function EducationDetailPage() {
                             )}
                             {educationItem.featured && (
                                 <div className="bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs">
-                                    ویژه
+                                    Featured
                                 </div>
                             )}
                         </div>
 
-                        {educationItem.description && (
-                            <p className="text-xl text-white/80 leading-relaxed border-r-4 border-green-500 pr-4">
-                                {educationItem.description}
+                        {(educationItem.descriptionEn || educationItem.description) && (
+                            <p className="text-xl text-white/80 leading-relaxed border-l-4 border-green-500 pl-4">
+                                {educationItem.descriptionEn || educationItem.description}
                             </p>
                         )}
                     </div>
@@ -173,7 +171,7 @@ export default function EducationDetailPage() {
                             <div className="glass rounded-2xl p-6">
                                 <div className="flex items-center gap-3 mb-4">
                                     <Play className="w-5 h-5 text-green-400" />
-                                    <h3 className="text-white font-medium">ویدیو آموزشی</h3>
+                                    <h3 className="text-white font-medium">Educational Video</h3>
                                 </div>
                                 <div className="aspect-video bg-black/30 rounded-xl overflow-hidden">
                                     {(() => {
@@ -200,7 +198,7 @@ export default function EducationDetailPage() {
                                                         src={`https://www.aparat.com/video/video/embed/videohash/${videoId}/vt/frame`}
                                                         className="w-full h-full"
                                                         allowFullScreen
-                                                        title={educationItem.title}
+                                                        title={educationItem.titleEn || educationItem.title}
                                                         frameBorder="0"
                                                     />
                                                 );
@@ -220,7 +218,7 @@ export default function EducationDetailPage() {
                                                     src={embedUrl}
                                                     className="w-full h-full"
                                                     allowFullScreen
-                                                    title={educationItem.title}
+                                                    title={educationItem.titleEn || educationItem.title}
                                                     frameBorder="0"
                                                 />
                                             );
@@ -233,7 +231,7 @@ export default function EducationDetailPage() {
                                                 className="w-full h-full object-cover"
                                                 src={videoUrl}
                                             >
-                                                مرورگر شما از نمایش ویدیو پشتیبانی نمی‌کند.
+                                                Your browser does not support the video tag.
                                             </video>
                                         );
                                     })()}
@@ -245,53 +243,28 @@ export default function EducationDetailPage() {
                     {/* Image */}
                     {educationItem.imageUrl && (
                         <div className="mb-8">
-                            <img
-                                src={educationItem.imageUrl}
-                                alt={educationItem.title}
-                                className="w-full h-64 md:h-96 object-cover rounded-2xl shadow-2xl"
-                            />
-                        </div>
-                    )}
-
-                    {/* Content */}
-                    <div className="glass-strong rounded-2xl p-8 mb-8">
-                        <div className="flex items-center gap-3 mb-6">
-                            <FileText className="w-5 h-5 text-green-400" />
-                            <h3 className="text-white font-medium">محتوای آموزشی</h3>
-                        </div>
-                        <div className="prose prose-invert prose-green max-w-none">
-                            <div
-                                className="text-white/90 leading-relaxed whitespace-pre-line"
-                                dangerouslySetInnerHTML={{ __html: educationItem.content.replace(/\n/g, '<br>') }}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Tags */}
-                    {educationItem.tags && educationItem.tags.length > 0 && (
-                        <div className="glass rounded-xl p-6 mb-8">
-                            <h3 className="text-white font-medium mb-4">برچسب‌ها:</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {educationItem.tags.map((tag, index) => (
-                                    <span
-                                        key={index}
-                                        className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-sm"
-                                    >
-                                        {tag}
-                                    </span>
-                                ))}
+                            <div className="glass rounded-2xl overflow-hidden">
+                                <img
+                                    src={educationItem.imageUrl}
+                                    alt={educationItem.titleEn || educationItem.title}
+                                    className="w-full h-auto"
+                                />
                             </div>
                         </div>
                     )}
 
-                    {/* Navigation */}
-                    <div className="flex justify-center">
-                        <Link
-                            href="/education"
-                            className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-8 py-3 rounded-lg font-medium hover:from-green-600 hover:to-emerald-600 transition-all duration-300 hover:scale-105 shadow-lg"
-                        >
-                            مشاهده سایر مطالب آموزشی
-                        </Link>
+                    {/* Content */}
+                    <div className="glass rounded-2xl p-8">
+                        <div className="flex items-center gap-3 mb-6">
+                            <FileText className="w-5 h-5 text-blue-400" />
+                            <h3 className="text-white font-medium text-xl">Course Content</h3>
+                        </div>
+                        <div
+                            className="prose prose-invert max-w-none text-white/90 leading-relaxed"
+                            dangerouslySetInnerHTML={{
+                                __html: educationItem.contentEn || educationItem.content || '<p>No content available.</p>'
+                            }}
+                        />
                     </div>
                 </article>
             </div>

@@ -333,7 +333,9 @@ export default function Dashboard() {
 
     const loadNews = async () => {
       try {
-        const res = await fetch('/api/news?all=1', { cache: 'no-store' });
+        const res = await authenticatedFetch('/api/news?all=1', {
+          cache: 'no-store'
+        });
         if (res.ok) {
           const data = await res.json();
           setNewsItems(data);
@@ -351,7 +353,9 @@ export default function Dashboard() {
     loadNews();
     const loadEducation = async () => {
       try {
-        const res = await fetch('/api/education?all=1', { cache: 'no-store' });
+        const res = await authenticatedFetch('/api/education?all=1', {
+          cache: 'no-store'
+        });
         if (res.ok) {
           const data = await res.json();
           setEducationItems(data);
@@ -366,7 +370,9 @@ export default function Dashboard() {
 
     const loadProducts = async () => {
       try {
-        const res = await fetch('/api/products?all=1', { cache: 'no-store' });
+        const res = await authenticatedFetch('/api/products?all=1', {
+          cache: 'no-store'
+        });
         if (res.ok) {
           const data = await res.json();
           setProductItems(data);
@@ -483,7 +489,7 @@ export default function Dashboard() {
       if (showForm.item) {
         // Update existing education
         try {
-          const res = await fetch(`/api/education/${(showForm.item as EducationItem).id || (showForm.item as any)._id}`, {
+          const res = await authenticatedFetch(`/api/education/${(showForm.item as EducationItem).id || (showForm.item as any)._id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -514,7 +520,7 @@ export default function Dashboard() {
       } else {
         // Add new education
         try {
-          const res = await fetch('/api/education', {
+          const res = await authenticatedFetch('/api/education', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -563,7 +569,7 @@ export default function Dashboard() {
     if (product) {
       // Update existing product
       try {
-        const res = await fetch(`/api/products/${product.id || product._id}`, {
+        const res = await authenticatedFetch(`/api/products/${product.id || product._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(productData)
@@ -582,7 +588,7 @@ export default function Dashboard() {
     } else {
       // Add new product
       try {
-        const res = await fetch('/api/products', {
+        const res = await authenticatedFetch('/api/products', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(productData)
@@ -605,7 +611,7 @@ export default function Dashboard() {
   const handleDeleteContent = async (type: 'news' | 'education' | 'products', id: string) => {
     if (type === 'news') {
       try {
-        const res = await authenticatedFetch(`/api/news/${id}`, { 
+        const res = await authenticatedFetch(`/api/news/${id}`, {
           method: 'DELETE'
         });
         if (res.ok) {
@@ -620,7 +626,7 @@ export default function Dashboard() {
       }
     } else if (type === 'education') {
       try {
-        const res = await authenticatedFetch(`/api/education/${id}`, { 
+        const res = await authenticatedFetch(`/api/education/${id}`, {
           method: 'DELETE'
         });
         if (res.ok) {
@@ -635,7 +641,7 @@ export default function Dashboard() {
       }
     } else if (type === 'products') {
       try {
-        const res = await authenticatedFetch(`/api/products/${id}`, { 
+        const res = await authenticatedFetch(`/api/products/${id}`, {
           method: 'DELETE'
         });
         if (res.ok) {
@@ -651,12 +657,29 @@ export default function Dashboard() {
     }
   };
 
+  const handleDeleteConsultation = async (id: string) => {
+    try {
+      const res = await authenticatedFetch(`/api/consultations/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        setConsultationItems(prev => prev.filter(c => c.id !== id && (c as any)._id !== id));
+        setApiError('');
+      } else {
+        const errorData = await res.text();
+        setApiError(`خطا در حذف درخواست مشاوره: ${res.status} - ${errorData}`);
+      }
+    } catch (error) {
+      setApiError(`خطا در ارتباط با سرور: ${error instanceof Error ? error.message : 'خطای نامشخص'}`);
+    }
+  };
+
   const handleTogglePublished = async (type: 'news' | 'education', id: string, published: boolean) => {
     if (type === 'news') {
       try {
         const item = newsItems.find(n => n.id === id || (n as any)._id === id);
         if (!item) return;
-        const res = await fetch(`/api/news/${id}`, {
+        const res = await authenticatedFetch(`/api/news/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...item, published })
@@ -672,7 +695,7 @@ export default function Dashboard() {
       try {
         const item = educationItems.find(e => e.id === id || (e as any)._id === id);
         if (!item) return;
-        const res = await fetch(`/api/education/${id}`, {
+        const res = await authenticatedFetch(`/api/education/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...item, published })
@@ -692,7 +715,7 @@ export default function Dashboard() {
       try {
         const item = newsItems.find(n => n.id === id || (n as any)._id === id);
         if (!item) return;
-        const res = await fetch(`/api/news/${id}`, {
+        const res = await authenticatedFetch(`/api/news/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...item, featured })
@@ -708,7 +731,7 @@ export default function Dashboard() {
       try {
         const item = educationItems.find(e => e.id === id || (e as any)._id === id);
         if (!item) return;
-        const res = await fetch(`/api/education/${id}`, {
+        const res = await authenticatedFetch(`/api/education/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...item, featured })
@@ -1278,7 +1301,7 @@ export default function Dashboard() {
                                   مشاهده جزئیات
                                 </button>
                                 <button
-                                  onClick={() => {/* Handle delete */ }}
+                                  onClick={() => handleDeleteConsultation(consultation.id || consultation._id)}
                                   className="bg-red-500/20 text-red-300 hover:bg-red-500/30 px-3 py-2 rounded-lg text-sm transition-all duration-300"
                                 >
                                   حذف

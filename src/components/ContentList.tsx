@@ -135,7 +135,7 @@ export default function ContentList({
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                onClick={() => onTogglePublished(item.id, !item.published)}
+                                                onClick={() => onTogglePublished(item.id || (item as any)._id, !item.published)}
                                                 className={item.published ? 'text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-500/10'}
                                             >
                                                 {item.published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
@@ -144,7 +144,7 @@ export default function ContentList({
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                onClick={() => onToggleFeatured(item.id, !item.featured)}
+                                                onClick={() => onToggleFeatured(item.id || (item as any)._id, !item.featured)}
                                                 className={item.featured ? 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-500/10'}
                                             >
                                                 <Star className={`w-4 h-4 ${item.featured ? 'fill-current' : ''}`} />
@@ -167,7 +167,7 @@ export default function ContentList({
                                                 size="sm"
                                                 onClick={() => {
                                                     if (window.confirm(`آیا از حذف "${item.title}" اطمینان دارید؟`)) {
-                                                        onDelete(item.id);
+                                                        onDelete(item.id || (item as any)._id);
                                                     }
                                                 }}
                                                 className="text-red-400 hover:text-red-300 hover:bg-red-500/10"

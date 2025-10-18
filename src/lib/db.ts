@@ -9,7 +9,7 @@ const getMongoDBURI = () => {
     process.env.MONGODB_URI_ALT1,
     process.env.MONGODB_URI_ALT2
   ];
-  
+
   for (const uri of uriOptions) {
     if (uri && uri.trim()) {
       return uri.trim();
@@ -56,11 +56,11 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
       .filter(key => key.toLowerCase().includes('mongo'))
       .map(key => `${key}=${process.env[key] ? 'SET' : 'NOT SET'}`)
       .join(', ');
-    
+
     const errorMessage = `❌ خطای اتصال: No MongoDB URI found in environment variables - ${MONGODB_URI}
 Available MongoDB-related vars: ${availableVars}
 Please set MONGODB_URI in your environment variables.`;
-    
+
     if (NODE_ENV === 'production') {
       throw new Error(errorMessage);
     }

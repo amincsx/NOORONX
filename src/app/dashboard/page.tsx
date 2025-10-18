@@ -10,6 +10,14 @@ import { NewsItem, EducationItem, ProductItem, DesignConsultationItem, AdminForm
 import { BarChart3, Plus, Newspaper, GraduationCap, Package, Eye, Star, ArrowLeft, LogIn, LogOut, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 
+// Helper function for authenticated API calls
+const authenticatedFetch = (url: string, options: RequestInit = {}) => {
+  return fetch(url, {
+    ...options,
+    credentials: 'include',
+  });
+};
+
 // Product Form Component
 const ProductForm = ({
   item,
@@ -372,7 +380,7 @@ export default function Dashboard() {
 
     const loadConsultations = async () => {
       try {
-        const res = await fetch('/api/consultations', {
+        const res = await authenticatedFetch('/api/consultations', {
           cache: 'no-store'
         });
         if (res.ok) {
@@ -411,7 +419,7 @@ export default function Dashboard() {
       if (showForm.item) {
         // Update existing news
         try {
-          const res = await fetch(`/api/news/${(showForm.item as NewsItem).id || (showForm.item as NewsItem)._id}`, {
+          const res = await authenticatedFetch(`/api/news/${(showForm.item as NewsItem).id || (showForm.item as NewsItem)._id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -442,7 +450,7 @@ export default function Dashboard() {
       } else {
         // Add new news
         try {
-          const res = await fetch('/api/news', {
+          const res = await authenticatedFetch('/api/news', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -597,7 +605,9 @@ export default function Dashboard() {
   const handleDeleteContent = async (type: 'news' | 'education' | 'products', id: string) => {
     if (type === 'news') {
       try {
-        const res = await fetch(`/api/news/${id}`, { method: 'DELETE' });
+        const res = await authenticatedFetch(`/api/news/${id}`, { 
+          method: 'DELETE'
+        });
         if (res.ok) {
           setNewsItems(prev => prev.filter(n => n.id !== id && (n as any)._id !== id));
           setApiError('');
@@ -610,7 +620,9 @@ export default function Dashboard() {
       }
     } else if (type === 'education') {
       try {
-        const res = await fetch(`/api/education/${id}`, { method: 'DELETE' });
+        const res = await authenticatedFetch(`/api/education/${id}`, { 
+          method: 'DELETE'
+        });
         if (res.ok) {
           setEducationItems(prev => prev.filter(e => e.id !== id && (e as any)._id !== id));
           setApiError('');
@@ -623,7 +635,9 @@ export default function Dashboard() {
       }
     } else if (type === 'products') {
       try {
-        const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        const res = await authenticatedFetch(`/api/products/${id}`, { 
+          method: 'DELETE'
+        });
         if (res.ok) {
           setProductItems(prev => prev.filter(p => p.id !== id && (p as any)._id !== id));
           setApiError('');

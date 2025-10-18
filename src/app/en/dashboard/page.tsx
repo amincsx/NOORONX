@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProductItem } from '@/types/admin';
-import { getSession, logout } from '@/lib/auth';
+import { getSession, logout } from '@/lib/clientAuth';
 
 const DashboardPage = () => {
     const [products, setProducts] = useState<ProductItem[]>([]);

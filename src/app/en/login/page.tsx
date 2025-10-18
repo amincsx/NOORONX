@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { login, getSession } from '@/lib/auth';
+import { login, getSession } from '@/lib/clientAuth';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');

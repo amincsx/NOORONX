@@ -1,17 +1,43 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URL || '';
+// Try multiple environment variable names in order of preference
+const getMongoDBURI = () => {
+  const uriOptions = [
+    process.env.MONGODB_URI,
+    process.env.MONGO_URL,
+    process.env.MONGODB_URI_LIARA,
+    process.env.MONGODB_URI_ALT1,
+    process.env.MONGODB_URI_ALT2
+  ];
+  
+  for (const uri of uriOptions) {
+    if (uri && uri.trim()) {
+      return uri.trim();
+    }
+  }
+  return '';
+};
+
+const MONGODB_URI = getMongoDBURI();
 const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// Log available environment variables for debugging
+console.log('Available environment variables:');
+console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
+console.log('- MONGO_URL:', process.env.MONGO_URL ? 'SET' : 'NOT SET');
+console.log('- MONGODB_URI_LIARA:', process.env.MONGODB_URI_LIARA ? 'SET' : 'NOT SET');
+console.log('- NODE_ENV:', NODE_ENV);
 
 // Only log warnings, don't throw errors during module import
 if (!MONGODB_URI) {
+  const message = `No MongoDB URI found in environment variables - ${MONGODB_URI}`;
   if (NODE_ENV === 'production') {
-    console.warn('Warning: MONGODB_URI not defined in production environment');
+    console.error('❌ Production Error:', message);
   } else {
-    console.warn('MONGODB_URI is not set. Set it in .env.local');
+    console.warn('⚠️ Development Warning:', message);
   }
 } else {
-  console.log('MongoDB URI configured:', MONGODB_URI.replace(/\/\/.*:.*@/, '//***:***@')); // Hide credentials in logs
+  console.log('✅ MongoDB URI configured:', MONGODB_URI.replace(/\/\/.*:.*@/, '//***:***@')); // Hide credentials in logs
 }
 
 interface GlobalWithMongoose {
@@ -26,10 +52,19 @@ let isMongoAvailable = true;
 export async function connectToDatabase(): Promise<typeof mongoose> {
   // Check for MongoDB URI when actually connecting
   if (!MONGODB_URI) {
+    const availableVars = Object.keys(process.env)
+      .filter(key => key.toLowerCase().includes('mongo'))
+      .map(key => `${key}=${process.env[key] ? 'SET' : 'NOT SET'}`)
+      .join(', ');
+    
+    const errorMessage = `❌ خطای اتصال: No MongoDB URI found in environment variables - ${MONGODB_URI}
+Available MongoDB-related vars: ${availableVars}
+Please set MONGODB_URI in your environment variables.`;
+    
     if (NODE_ENV === 'production') {
-      throw new Error('MONGODB_URI must be defined in production environment');
+      throw new Error(errorMessage);
     }
-    throw new Error('MongoDB URI is not configured');
+    throw new Error(`MongoDB URI is not configured. ${errorMessage}`);
   }
 
   // If we know MongoDB is not available in development, throw immediately

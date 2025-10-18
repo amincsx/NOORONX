@@ -32,32 +32,94 @@ export default function EnglishNewsPage() {
       }
     };
     load();
-
-    // Ensure toEnglishDigits is applied consistently
-    const formatNumber = (number: string | number) => toEnglishDigits(number);
-
+    
+    // Aggressive number conversion function
+    const convertNumbersToEnglish = () => {
+      const persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      
+      // Convert all text nodes
+      const walker = document.createTreeWalker(
+        document.body,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+      
+      let node;
+      while (node = walker.nextNode()) {
+        if (node.textContent && node.parentElement) {
+          let text = node.textContent;
+          let changed = false;
+          
+          for (let i = 0; i < persian.length; i++) {
+            if (text.includes(persian[i])) {
+              text = text.replace(new RegExp(persian[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+          
+          for (let i = 0; i < arabic.length; i++) {
+            if (text.includes(arabic[i])) {
+              text = text.replace(new RegExp(arabic[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+          
+          if (changed) {
+            node.textContent = text;
+          }
+        }
+      }
+      
+      // Also convert innerHTML of all elements
+      const allElements = document.querySelectorAll('*');
+      allElements.forEach(element => {
+        if (element.innerHTML) {
+          let html = element.innerHTML;
+          let changed = false;
+          
+          for (let i = 0; i < persian.length; i++) {
+            if (html.includes(persian[i])) {
+              html = html.replace(new RegExp(persian[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+          
+          for (let i = 0; i < arabic.length; i++) {
+            if (html.includes(arabic[i])) {
+              html = html.replace(new RegExp(arabic[i], 'g'), i.toString());
+              changed = true;
+            }
+          }
+          
+          if (changed) {
+            element.innerHTML = html;
+          }
+        }
+      });
+    };
+    
+    // Run conversion multiple times with different delays
+    setTimeout(convertNumbersToEnglish, 100);
+    setTimeout(convertNumbersToEnglish, 500);
+    setTimeout(convertNumbersToEnglish, 1000);
+    setTimeout(convertNumbersToEnglish, 2000);
+    
     // Set up MutationObserver to catch dynamic content
     const observer = new MutationObserver(() => {
-      setTimeout(() => {
-        document.querySelectorAll('.number-to-english').forEach(el => {
-          el.textContent = toEnglishDigits(el.textContent || '');
-        });
-      }, 100);
+      setTimeout(convertNumbersToEnglish, 100);
     });
-
+    
     observer.observe(document.body, {
       childList: true,
       subtree: true,
       characterData: true
     });
-
+    
     // Run conversion every 2 seconds to catch any missed numbers
-    const interval = setInterval(() => {
-      document.querySelectorAll('.number-to-english').forEach(el => {
-        el.textContent = toEnglishDigits(el.textContent || '');
-      });
-    }, 2000);
-
+    const interval = setInterval(convertNumbersToEnglish, 2000);
+    
     return () => {
       observer.disconnect();
       clearInterval(interval);
@@ -207,20 +269,6 @@ export default function EnglishNewsPage() {
             </Link>
           </div>
         )}
-      </div>
-
-      <style jsx>{`
-          .number-to-english {
-            font-feature-settings: 'lnum';
-            font-variant-numeric: lining-nums;
-            font-family: Arial, Helvetica, sans-serif;
-            direction: ltr;
-          }
-        `}</style>
-
-      {/* Ensure the lang attribute is set to English */}
-      <div className="number-to-english" lang="en">
-        {/* Example usage */}
       </div>
     </div>
   );

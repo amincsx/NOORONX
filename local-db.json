@@ -1,26 +1,47 @@
 {
   "news": [
     {
-      "title": "cxvcxvcxvcxv",
-      "titleEn": "xcv",
-      "content": "xcv",
-      "contentEn": "xcv",
-      "excerpt": "xcv",
-      "excerptEn": "vcx",
+      "_id": "68f38fcef6f001b3065fdf86",
+      "title": "jj",
+      "titleEn": "dfg",
+      "content": "dfg",
+      "contentEn": "dfg",
+      "excerpt": "dfg",
+      "excerptEn": "dfg",
       "imageUrl": "",
-      "author": "cxv",
+      "author": "dfg",
       "published": true,
       "featured": false,
       "tags": [],
-      "_id": "mock_news_1_1757511872888",
-      "id": "mock_news_1_1757511872888",
-      "createdAt": "2025-09-10T13:44:32.888Z",
-      "updatedAt": "2025-09-10T13:44:32.888Z"
+      "views": 0,
+      "createdAt": "2025-10-18T13:02:06.844Z",
+      "updatedAt": "2025-10-18T13:02:06.844Z",
+      "__v": 0,
+      "id": "68f38fcef6f001b3065fdf86"
+    },
+    {
+      "_id": "68f3927df6f001b3065fdf8b",
+      "title": "l",
+      "titleEn": "l",
+      "content": "l",
+      "contentEn": "l",
+      "excerpt": "l",
+      "excerptEn": "l",
+      "imageUrl": "",
+      "author": "l",
+      "published": true,
+      "featured": false,
+      "tags": [],
+      "views": 0,
+      "createdAt": "2025-10-18T13:13:33.350Z",
+      "updatedAt": "2025-10-18T13:13:33.350Z",
+      "__v": 0,
+      "id": "68f3927df6f001b3065fdf8b"
     }
   ],
   "education": [],
   "_counters": {
-    "news": 1,
+    "news": 2,
     "education": 0
   }
 }

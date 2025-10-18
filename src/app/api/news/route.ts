@@ -9,14 +9,30 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const includeAll = searchParams.get('all') === '1';
+    const NODE_ENV = process.env.NODE_ENV || 'development';
 
     try {
       await connectToDatabase();
       const query = includeAll ? {} : { published: true };
       const items = await News.find(query).sort({ createdAt: -1 }).lean();
-      return NextResponse.json(items, { status: 200 });
+      return NextResponse.json(items, { 
+        status: 200,
+        headers: { 'X-Database': 'mongodb' }
+      });
     } catch (mongoError) {
-      console.log('MongoDB not available, using mock database');
+      console.log('MongoDB not available:', mongoError);
+      
+      // In production, don't fall back to mock data - return error instead
+      if (NODE_ENV === 'production') {
+        console.error('Production database connection failed - this should not happen');
+        return NextResponse.json(
+          { message: 'Database connection failed', error: 'MongoDB unavailable' }, 
+          { status: 503 }
+        );
+      }
+      
+      // In development, fall back to mock database
+      console.log('Using mock database for development');
       const items = await MockNews.find(includeAll ? {} : { published: true });
       const results = await items.lean();
       return NextResponse.json(results, {
@@ -51,12 +67,29 @@ export async function POST(request: Request) {
       tags: Array.isArray(body.tags) ? body.tags : [],
     };
 
+    const NODE_ENV = process.env.NODE_ENV || 'development';
+
     try {
       await connectToDatabase();
       const created = await News.create(newsData);
-      return NextResponse.json(created, { status: 201 });
+      return NextResponse.json(created, { 
+        status: 201,
+        headers: { 'X-Database': 'mongodb' }
+      });
     } catch (mongoError) {
-      console.log('MongoDB not available, using mock database');
+      console.log('MongoDB not available:', mongoError);
+      
+      // In production, don't fall back to mock data
+      if (NODE_ENV === 'production') {
+        console.error('Production database connection failed during POST');
+        return NextResponse.json(
+          { message: 'Database connection failed', error: 'MongoDB unavailable' }, 
+          { status: 503 }
+        );
+      }
+      
+      // In development, fall back to mock database
+      console.log('Using mock database for development');
       const created = await MockNews.create(newsData);
       return NextResponse.json(created, {
         status: 201,

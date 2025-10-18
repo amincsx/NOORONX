@@ -42,8 +42,7 @@ export default function EnglishNewsPage() {
       const walker = document.createTreeWalker(
         document.body,
         NodeFilter.SHOW_TEXT,
-        null,
-        false
+        null
       );
       
       let node;

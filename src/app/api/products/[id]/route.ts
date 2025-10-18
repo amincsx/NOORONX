@@ -7,10 +7,10 @@ import { requireAuth } from '@/lib/auth';
 // GET /api/products/[id] - get a single product
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const NODE_ENV = process.env.NODE_ENV || 'development';
 
     try {
@@ -41,7 +41,8 @@ export async function GET(
       });
     }
   } catch (error) {
-    console.error(`GET /api/products/${params.id} error`, error);
+    const { id } = await context.params;
+    console.error(`GET /api/products/${id} error`, error);
     return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }
@@ -49,13 +50,13 @@ export async function GET(
 // PUT /api/products/[id] - update a product
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
     const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -87,7 +88,8 @@ export async function PUT(
       });
     }
   } catch (error) {
-    console.error(`PUT /api/products/${params.id} error`, error);
+    const { id } = await context.params;
+    console.error(`PUT /api/products/${id} error`, error);
     return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }
@@ -95,13 +97,13 @@ export async function PUT(
 // DELETE /api/products/[id] - delete a product
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const ok = await requireAuth(request);
     if (!ok) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
-    const { id } = params;
+    const { id } = await context.params;
     const NODE_ENV = process.env.NODE_ENV || 'development';
 
     try {
@@ -126,7 +128,8 @@ export async function DELETE(
       return NextResponse.json({ message: 'Product deleted' }, { status: 200 });
     }
   } catch (error) {
-    console.error(`DELETE /api/products/${params.id} error`, error);
+    const { id } = await context.params;
+    console.error(`DELETE /api/products/${id} error`, error);
     return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }

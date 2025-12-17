@@ -31,12 +31,12 @@ export const metadata: Metadata = {
   authors: [{ name: "NOORONX Team" }],
   creator: "NOORONX",
   publisher: "NOORONX",
-  metadataBase: new URL('https://nooronx.liara.run'),
+  metadataBase: new URL('https://nooronx.com'),
   alternates: {
-    canonical: 'https://nooronx.liara.run',
+    canonical: 'https://nooronx.com',
     languages: {
-      'fa-IR': 'https://nooronx.liara.run',
-      'en-US': 'https://nooronx.liara.run/en',
+      'fa-IR': 'https://nooronx.com',
+      'en-US': 'https://nooronx.com/en',
     },
   },
   robots: {
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'fa_IR',
-    url: 'https://nooronx.liara.run',
+    url: 'https://nooronx.com',
     siteName: 'NOORONX',
     title: 'NOORONX - انرژی خورشیدی نوین',
     description: 'شرکت NOORONX ارائه‌دهنده خدمات نصب و راه‌اندازی پنل‌های خورشیدی، مشاوره انرژی پاک و راه‌حل‌های پایدار',

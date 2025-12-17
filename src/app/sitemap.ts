@@ -4,7 +4,7 @@ import News from '@/models/News';
 import { EducationItem } from '@/types/admin';
 import { dataStore } from '@/lib/dataStore';
 
-const SITE_URL = 'https://nooronx.liara.run';
+const SITE_URL = 'https://nooronx.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

@@ -24,7 +24,7 @@ export default function StructuredData() {
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer support",
-      "url": "https://nooronx.liara.run/contact",
+      "url": "https://nooronx.com/contact",
       "availableLanguage": ["Persian", "English"]
     },
     "sameAs": [
@@ -61,12 +61,12 @@ export default function StructuredData() {
     "@type": "WebSite",
     "name": "NOORONX",
     "alternateName": "نورانکس",
-    "url": "https://nooronx.liara.run",
+    "url": "https://nooronx.com",
     "description": "شرکت NOORONX ارائه‌دهنده خدمات نصب و راه‌اندازی پنل‌های خورشیدی، مشاوره انرژی پاک و راه‌حل‌های پایدار",
     "inLanguage": ["fa-IR", "en-US"],
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://nooronx.liara.run/search?q={search_term_string}",
+      "target": "https://nooronx.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
     },
     "publisher": {
@@ -74,7 +74,7 @@ export default function StructuredData() {
       "name": "NOORONX",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://nooronx.liara.run/images/logo.png"
+        "url": "https://nooronx.com/images/logo.png"
       }
     }
   };
@@ -87,25 +87,25 @@ export default function StructuredData() {
         "@type": "ListItem",
         "position": 1,
         "name": "خانه",
-        "item": "https://nooronx.liara.run"
+        "item": "https://nooronx.com"
       },
       {
         "@type": "ListItem", 
         "position": 2,
         "name": "خدمات",
-        "item": "https://nooronx.liara.run/services"
+        "item": "https://nooronx.com/services"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "آموزش", 
-        "item": "https://nooronx.liara.run/education"
+        "item": "https://nooronx.com/education"
       },
       {
         "@type": "ListItem",
         "position": 4,
         "name": "اخبار",
-        "item": "https://nooronx.liara.run/news"
+        "item": "https://nooronx.com/news"
       }
     ]
   };

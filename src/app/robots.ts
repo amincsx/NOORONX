@@ -26,7 +26,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://nooronx.liara.run/sitemap.xml',
-    host: 'https://nooronx.liara.run',
+    sitemap: 'https://nooronx.com/sitemap.xml',
+    host: 'https://nooronx.com',
   };
 }

@@ -28,7 +28,7 @@ export async function setAuthCookie(username: string) {
   const value = `${username}|${Date.now()}`;
   const signed = sign(value);
   const cookieStore = await cookies();
-  
+
   cookieStore.set(AUTH_COOKIE, signed, {
     httpOnly: true,
     sameSite: 'lax',

@@ -4,7 +4,7 @@ import { setAuthCookie, verifyCredentials } from '@/lib/auth';
 export async function POST(request: Request) {
   try {
     const { username, password } = await request.json();
-    
+
     // Debug info (only in development)
     if (process.env.NODE_ENV === 'development') {
       console.log('Login attempt:', { username, hasPassword: Boolean(password) });
@@ -14,9 +14,9 @@ export async function POST(request: Request) {
         hasAuthSecret: Boolean(process.env.AUTH_SECRET)
       });
     }
-    
+
     if (!verifyCredentials(username, password)) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         message: 'Invalid credentials',
         debug: process.env.NODE_ENV === 'development' ? {
           receivedUser: username,
@@ -24,12 +24,12 @@ export async function POST(request: Request) {
         } : undefined
       }, { status: 401 });
     }
-    
+
     await setAuthCookie(username);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Login error:', error);
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'Server error',
       error: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : 'Unknown') : undefined
     }, { status: 500 });

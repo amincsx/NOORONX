@@ -78,52 +78,10 @@ export const metadata: Metadata = {
     google: 'google-site-verification-code-here',
     // You can add Google Search Console verification code here
   },
-  creator: "NOORONX",
-  publisher: "NOORONX",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
-  },
-  metadataBase: new URL('https://nooronx.com'),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: "NOORONX - انرژی خورشیدی نوین",
-    description: "راه‌حل‌های نوآورانه انرژی خورشیدی برای آینده‌ای پایدار و مقرون به صرفه",
-    url: 'https://nooronx.com',
-    siteName: 'NOORONX',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'NOORONX - انرژی خورشیدی نوین',
-      },
-    ],
-    locale: 'fa_IR',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'NOORONX - انرژی خورشیدی نوین',
-    description: 'راه‌حل‌های نوآورانه انرژی خورشیدی برای آینده‌ای پایدار',
-    images: ['/og-image.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: 'your-google-verification-code',
   },
 };
 

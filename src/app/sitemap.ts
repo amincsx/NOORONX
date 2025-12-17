@@ -89,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const Education = (await import('@/models/Education')).default;
     const publishedEducation = await Education.find({ published: true }).lean();
-    educationSitemapEntries = publishedEducation.map((eduItem: EducationItem) => ({
+    educationSitemapEntries = publishedEducation.map((eduItem: any) => ({
       url: `${SITE_URL}/education/${eduItem._id}`,
       lastModified: new Date(eduItem.updatedAt || eduItem.createdAt),
       changeFrequency: 'weekly' as const,
@@ -97,7 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     // English education URLs
-    const englishEducationSitemapEntries: MetadataRoute.Sitemap = publishedEducation.map((eduItem: EducationItem) => ({
+    const englishEducationSitemapEntries: MetadataRoute.Sitemap = publishedEducation.map((eduItem: any) => ({
       url: `${SITE_URL}/en/education/${eduItem._id}`, 
       lastModified: new Date(eduItem.updatedAt || eduItem.createdAt),
       changeFrequency: 'weekly' as const,

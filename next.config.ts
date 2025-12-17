@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
-  
+
   // Headers for better SEO and security
   async headers() {
     return [

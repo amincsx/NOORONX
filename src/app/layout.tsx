@@ -16,9 +16,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "NOORONX - انرژی خورشیدی نوین | پنل‌های خورشیدی و راه‌حل‌های انرژی پاک",
   description: "شرکت NOORONX ارائه‌دهنده خدمات نصب و راه‌اندازی پنل‌های خورشیدی، مشاوره انرژی پاک و راه‌حل‌های پایدار برای کاهش هزینه‌های برق",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'icon',
+        url: '/icon.svg',
+        type: 'image/svg+xml',
+      },
+    ],
+  },
   keywords: [
     "انرژی خورشیدی",
-    "پنل خورشیدی", 
+    "پنل خورشیدی",
     "نصب پنل خورشیدی",
     "انرژی پاک",
     "برق خورشیدی",

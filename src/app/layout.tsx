@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NOORONX - انرژی  نوین | پنل‌های خورشیدی و راه‌حل‌های انرژی پاک",
+  title: "NOORONX - انرژی نوین | پنل‌های خورشیدی و راه‌حل‌های انرژی پاک",
   description: "شرکت NOORONX ارائه‌دهنده خدمات نصب و راه‌اندازی پنل‌های خورشیدی، مشاوره انرژی پاک و راه‌حل‌های پایدار برای کاهش هزینه‌های برق",
   icons: {
     icon: [
@@ -30,16 +30,23 @@ export const metadata: Metadata = {
     ],
   },
   keywords: [
+    "انرژی",
+    "انرژی تجدیدپذیر",
+    "انرژی پاک",
     "انرژی خورشیدی",
     "پنل خورشیدی",
-    "نصب پنل خورشیدی",
-    "انرژی پاک",
-    "برق خورشیدی",
-    "مزرعه خورشیدی",
+    "انرژی بادی",
+    "پنل بادی",
+    "انرژی آبی",
+    "نیروگاه بادی",
+    "نیروگاه آبی",
+    "ذخیره‌سازی انرژی",
+    "باتری",
+    "هیدروژن",
+    "بهره‌وری انرژی",
     "صرفه‌جویی انرژی",
-    "محیط زیست",
     "توسعه پایدار",
-    "انرژی تجدیدپذیر"
+    "محیط زیست"
   ],
   authors: [{ name: "NOORONX Team" }],
   creator: "NOORONX",
@@ -68,14 +75,14 @@ export const metadata: Metadata = {
     locale: 'fa_IR',
     url: 'https://nooronx.com',
     siteName: 'NOORONX',
-    title: 'NOORONX - انرژی خورشیدی نوین',
+    title: 'NOORONX - انرژی نوین',
     description: 'شرکت NOORONX ارائه‌دهنده خدمات نصب و راه‌اندازی پنل‌های خورشیدی، مشاوره انرژی پاک و راه‌حل‌های پایدار',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'NOORONX - انرژی خورشیدی نوین',
+        alt: 'NOORONX - انرژی نوین',
       },
     ],
   },
@@ -83,7 +90,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@nooronx',
     creator: '@nooronx',
-    title: 'NOORONX - انرژی خورشیدی نوین',
+    title: 'NOORONX - انرژی نوین',
     description: 'شرکت NOORONX ارائه‌دهنده خدمات نصب و راه‌اندازی پنل‌های خورشیدی، مشاوره انرژی پاک و راه‌حل‌های پایدار',
     images: ['/images/twitter-image.jpg'],
   },

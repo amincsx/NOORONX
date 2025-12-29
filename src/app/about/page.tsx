@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 import ResponsiveBackground from '@/components/ResponsiveBackground';
 
@@ -73,8 +74,15 @@ export default function AboutPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
-                <div className="h-48 bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 rounded-xl mb-4 flex items-center justify-center">
-                  <span className="text-6xl">👨‍💼</span>
+                <div className="h-64 bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 rounded-xl mb-4 flex items-start justify-center overflow-hidden">
+                  <Image
+                    src="/mohammad reza.jpeg"
+                    alt="Mohammad Reza - Founder of Nouran Company - Renewable Energy Expert"
+                    width={100}
+                    height={100}
+                    className="w-50 h-64 object-cover"
+                    priority
+                  />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-white/60 mb-2 text-right">
                   محمدرضا ضیایان
@@ -86,8 +94,15 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-black/30 backdrop-blur-sm p-6 border border-gray-700/30 hover:bg-gray-900/50 transition-all duration-300 hover:scale-105 rounded-xl">
-                <div className="h-48 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl mb-4 flex items-center justify-center">
-                  <span className="text-6xl">👨‍💻</span>
+                <div className="h-64 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl mb-4 flex items-start justify-center overflow-hidden">
+                  <Image
+                    src="/amin azizi.jpg"
+                    alt="Mohammad Amin Azizi - IT Manager and Developer at Nouran Company"
+                    width={100}
+                    height={100}
+                    className="w-50 h-64 object-cover"
+                    priority
+                  />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-white/60 mb-2 text-right">
                   محمدامین عزیزی

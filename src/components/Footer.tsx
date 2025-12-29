@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
             <div className="text-center md:text-right">
               <h5 className="text-white/80 font-semibold mb-2">{t('contactUs')}</h5>
               <p className="text-white/60 text-sm">{t('address')}</p>
-              <p className="text-white/60 text-sm">info@nooronx.com</p>
+              <p className="text-white/60 text-sm">Nooronxco@gmail.com</p>
             </div>
             <div className="text-center">
               <h5 className="text-white/80 font-semibold mb-2">{t('workingHours')}</h5>
@@ -138,8 +138,9 @@ const Footer: React.FC = () => {
             </div>
             <div className="text-center md:text-left">
               <h5 className="text-white/80 font-semibold mb-2">{t('phone')}</h5>
-              <p className="text-white/60 text-sm">021-12345678</p>
-              <p className="text-white/60 text-sm">0912-1234567</p>
+              <p className="text-white/60 text-sm">021-88306001</p>
+              <p className="text-white/60 text-sm">021-88832719</p>
+              <p className="text-white/60 text-sm">021-88308705</p>
             </div>
           </div>
         </div>

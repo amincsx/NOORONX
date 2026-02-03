@@ -3,7 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* SEO and Performance Optimizations */
   images: {
-    domains: ['nooronx.liara.run'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'nooronx.liara.run',
+      },
+    ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
   },

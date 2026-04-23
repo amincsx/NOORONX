@@ -37,11 +37,31 @@
       "updatedAt": "2025-10-18T13:13:33.350Z",
       "__v": 0,
       "id": "68f3927df6f001b3065fdf8b"
+    },
+    {
+      "title": "adsfa",
+      "titleEn": "asd",
+      "content": "asd",
+      "contentEn": "asd",
+      "excerpt": "aasd",
+      "excerptEn": "asd",
+      "imageUrl": "https://example.com",
+      "author": "asd",
+      "published": true,
+      "featured": false,
+      "tags": [],
+      "_id": "mock_news_3_1776349263637",
+      "id": "mock_news_3_1776349263637",
+      "views": 0,
+      "createdAt": "2026-04-16T14:21:03.637Z",
+      "updatedAt": "2026-04-16T14:21:03.637Z"
     }
   ],
   "education": [],
   "_counters": {
-    "news": 2,
-    "education": 0
-  }
+    "news": 3,
+    "education": 0,
+    "products": 0
+  },
+  "products": []
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 export default function ResponsiveBackground() {
-  const [backgroundImage, setBackgroundImage] = useState('/bg1080.jpg');
+  const [backgroundImage, setBackgroundImage] = useState('/bg1080.webp');
 
   useEffect(() => {
     const updateBackground = () => {
@@ -13,15 +13,15 @@ export default function ResponsiveBackground() {
       
       // Check if it's a vertical/mobile screen
       if (aspectRatio < 1) {
-        setBackgroundImage('/bgvertical.jpg');
+        setBackgroundImage('/bgvertical.webp');
       }
       // Check if it's 4K or high resolution
       else if (width >= 2560) {
-        setBackgroundImage('/bg4k.jpg');
+        setBackgroundImage('/bg1080.webp');
       }
       // Default to 1080p
       else {
-        setBackgroundImage('/bg1080.jpg');
+        setBackgroundImage('/bg1080.webp');
       }
     };
 

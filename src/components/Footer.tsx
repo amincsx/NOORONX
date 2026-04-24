@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { getCurrentLanguage, getTranslation } from '@/lib/i18n';
 import { TranslationKey } from '@/lib/translations';
+import { APP_VERSION } from '@/lib/appConfig';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -149,7 +150,7 @@ const Footer: React.FC = () => {
         <div className="border-t border-white/10 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-white/60 text-sm">
-              © {currentYear} NOORONX. {t('allRightsReserved')}
+              © {currentYear} NOORONX. {t('allRightsReserved')} | v{APP_VERSION}
             </div>
             <div className="flex space-x-6 space-x-reverse text-sm">
               <Link href={currentLang === 'en' ? '/en/terms' : '/terms'} className="text-white/60 hover:text-yellow-400 transition-colors duration-300">

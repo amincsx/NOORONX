@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
-import BackgroundVideo from "@/components/BackgroundVideo";
 import Footer from "@/components/Footer";
+import HomepageContentSlider from "@/components/HomepageContentSlider";
+import HomepageBackdrop from "@/components/HomepageBackdrop";
 import SimpleLanguageSelector from "@/components/SimpleLanguageSelector";
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -11,16 +12,16 @@ import { toEnglishDigits } from '@/lib/utils';
 
 export default function EnglishHomePage() {
   const solarSentences = [
-    "☀️ Solar energy, your future investment",
-    "⚡ Save costs with modern solar panels",
-    "🌱 Green living with clean solar energy",
-    "🔋 Generate free electricity from the sun, start today",
-    "🏡 A bright home with smart solar panels",
-    "🌞 Endless sun, endless energy",
-    "💡 A sustainable solution to reduce your electricity costs",
-    "🌍 Help create a clean future with solar energy",
-    "🚀 Solar technology, a step towards energy independence",
-    "✅ Solar panels; a smart choice for you and the environment"
+    "â˜€ï¸ Solar energy, your future investment",
+    "âš¡ Save costs with modern solar panels",
+    "ðŸŒ± Green living with clean solar energy",
+    "ðŸ”‹ Generate free electricity from the sun, start today",
+    "ðŸ¡ A bright home with smart solar panels",
+    "ðŸŒž Endless sun, endless energy",
+    "ðŸ’¡ A sustainable solution to reduce your electricity costs",
+    "ðŸŒ Help create a clean future with solar energy",
+    "ðŸš€ Solar technology, a step towards energy independence",
+    "âœ… Solar panels; a smart choice for you and the environment"
   ];
 
   const [currentSentence, setCurrentSentence] = useState(0);
@@ -29,7 +30,6 @@ export default function EnglishHomePage() {
   const [isTyping, setIsTyping] = useState(true);
   const [scrollY, setScrollY] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [showBottomSections, setShowBottomSections] = useState(false);
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [educationItems, setEducationItems] = useState<EducationItem[]>([]);
   const [productItems, setProductItems] = useState<ProductItem[]>([]);
@@ -59,8 +59,8 @@ export default function EnglishHomePage() {
 
     // Aggressive number conversion function
     const convertNumbersToEnglish = () => {
-      const persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+      const persian = ['Û°', 'Û±', 'Û²', 'Û³', 'Û´', 'Ûµ', 'Û¶', 'Û·', 'Û¸', 'Û¹'];
+      const arabic = ['Ù ', 'Ù¡', 'Ù¢', 'Ù£', 'Ù¤', 'Ù¥', 'Ù¦', 'Ù§', 'Ù¨', 'Ù©'];
 
       // Convert all text nodes
       const walker = document.createTreeWalker(
@@ -158,11 +158,11 @@ export default function EnglishHomePage() {
         if (newsRes.ok) {
           const newsData = await newsRes.json();
           const publishedNews = newsData.filter((item: NewsItem) => item.published);
-          setNewsItems(publishedNews.slice(0, 1));
+          setNewsItems(publishedNews.slice(0, 5));
         } else {
           const allNews = await dataStore.getNews();
           const publishedNews = allNews.filter(item => item.published);
-          setNewsItems(publishedNews.slice(0, 1));
+          setNewsItems(publishedNews.slice(0, 5));
         }
 
         // Fetch Education
@@ -170,11 +170,11 @@ export default function EnglishHomePage() {
         if (eduRes.ok) {
           const eduData = await eduRes.json();
           const publishedEducation = eduData.filter((item: EducationItem) => item.published);
-          setEducationItems(publishedEducation.slice(0, 1));
+          setEducationItems(publishedEducation.slice(0, 5));
         } else {
           const allEducation = await dataStore.getEducation();
           const publishedEducation = allEducation.filter(item => item.published);
-          setEducationItems(publishedEducation.slice(0, 1));
+          setEducationItems(publishedEducation.slice(0, 5));
         }
 
         // Fetch Products
@@ -182,26 +182,26 @@ export default function EnglishHomePage() {
         if (prodRes.ok) {
           const prodData = await prodRes.json();
           const publishedProducts = prodData.filter((item: ProductItem) => item.published);
-          setProductItems(publishedProducts.slice(0, 1));
+          setProductItems(publishedProducts.slice(0, 5));
         } else {
           const allProducts = await dataStore.getProducts();
           const publishedProducts = allProducts.filter(item => item.published);
-          setProductItems(publishedProducts.slice(0, 1));
+          setProductItems(publishedProducts.slice(0, 5));
         }
       } catch (error) {
         console.error("Failed to load data, falling back to local store", error);
         // Fallback for all
         const allNews = await dataStore.getNews();
         const publishedNews = allNews.filter(item => item.published);
-        setNewsItems(publishedNews.slice(0, 1));
+        setNewsItems(publishedNews.slice(0, 5));
 
         const allEducation = await dataStore.getEducation();
         const publishedEducation = allEducation.filter(item => item.published);
-        setEducationItems(publishedEducation.slice(0, 1));
+        setEducationItems(publishedEducation.slice(0, 5));
 
         const allProducts = await dataStore.getProducts();
         const publishedProducts = allProducts.filter(item => item.published);
-        setProductItems(publishedProducts.slice(0, 1));
+        setProductItems(publishedProducts.slice(0, 5));
       }
     };
     loadData();
@@ -296,169 +296,130 @@ export default function EnglishHomePage() {
       </div>
 
       <div className="min-h-screen relative">
-        <BackgroundVideo />
-
+        <HomepageBackdrop />
         {/* Content Sections */}
         <section className="relative z-10 py-40">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-              {/* News Section */}
-              <div className="glass-strong rounded-3xl p-4 sm:p-6 flex flex-col h-full">
-                <div className="text-center mb-6 animate-on-scroll">
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow">Latest News</h2>
-                </div>
-                <div className="space-y-4 flex-grow">
-                  {newsItems.length > 0 ? (
-                    newsItems.map((article, index) => (
-                      <article key={article.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                        <div className="relative h-32 overflow-hidden">
-                          <img
-                            src={article.imageUrl || "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop"}
-                            alt={article.titleEn || article.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                          <div className="absolute bottom-2 left-2 right-2">
-                            <span className="inline-block bg-yellow-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
-                              {article.tags?.[0] || 'News'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="p-3">
-                          <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-yellow-400 transition-colors">
-                            {article.titleEn || article.title}
-                          </h3>
-                          <p className="text-white/70 text-xs leading-relaxed mb-2">
-                            {truncateText(article.excerptEn || article.excerpt || article.contentEn || article.content, 60)}
-                          </p>
-                          <Link href={`/en/news/${article.id || article._id}`} className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-xs font-medium">
-                            Read More
-                          </Link>
-                        </div>
-                      </article>
-                    ))
-                  ) : (
-                    <div className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift">
-                      <div className="relative h-32 overflow-hidden"><div className="w-full h-full bg-gray-700/50 flex items-center justify-center"><span className="text-white/50">Loading...</span></div></div>
-                      <div className="p-3"><div className="h-4 bg-gray-700/50 rounded mb-2"></div><div className="h-12 bg-gray-700/30 rounded mb-2"></div><div className="h-6 bg-gray-700/20 rounded"></div></div>
+              <HomepageContentSlider
+                title="Latest News"
+                items={newsItems}
+                emptyState="Loading..."
+                viewAllHref="/en/news"
+                viewAllLabel="View All News →"
+                buttonClassName="bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30"
+                itemLabel="news item"
+                dir="ltr"
+                getKey={(item) => item.id || item._id || item.title}
+                renderItem={(item, index) => (
+                  <article className="group animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                    <div className="relative h-32 overflow-hidden">
+                      <img
+                        src={item.imageUrl || "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop"}
+                        alt={item.titleEn || item.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <span className="inline-block bg-yellow-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                          {item.tags?.[0] || "News"}
+                        </span>
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className="text-center mt-6">
-                  <Link
-                    href="/en/news"
-                    className="inline-block bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-yellow-500/30 transition-colors duration-300"
-                  >
-                    View All News →
-                  </Link>
-                </div>
-              </div>
-
-              {/* Education Section */}
-              <div className="glass-strong rounded-3xl p-4 sm:p-6 flex flex-col h-full">
-                <div className="text-center mb-6 animate-on-scroll">
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow">Latest Education</h2>
-                </div>
-                <div className="space-y-4 flex-grow">
-                  {educationItems.length > 0 ? (
-                    educationItems.map((item, index) => (
-                      <article key={item.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                        <div className="relative h-32 overflow-hidden">
-                          <img
-                            src={item.imageUrl || "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400&h=300&fit=crop"}
-                            alt={item.titleEn || item.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                          <div className="absolute bottom-2 left-2 right-2">
-                            <span className="inline-block bg-blue-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
-                              {item.category || 'Education'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="p-3">
-                          <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-blue-400 transition-colors">
-                            {item.titleEn || item.title}
-                          </h3>
-                          <p className="text-white/70 text-xs leading-relaxed mb-2">
-                            {truncateText(item.descriptionEn || item.description, 60)}
-                          </p>
-                          <Link href={`/en/education/${item.id || item._id}`} className="text-blue-400 hover:text-blue-300 transition-colors duration-300 text-xs font-medium">
-                            View Course
-                          </Link>
-                        </div>
-                      </article>
-                    ))
-                  ) : (
-                    <div className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift">
-                      <div className="relative h-32 overflow-hidden"><div className="w-full h-full bg-gray-700/50 flex items-center justify-center"><span className="text-white/50">Loading...</span></div></div>
-                      <div className="p-3"><div className="h-4 bg-gray-700/50 rounded mb-2"></div><div className="h-12 bg-gray-700/30 rounded mb-2"></div><div className="h-6 bg-gray-700/20 rounded"></div></div>
+                    <div className="p-3">
+                      <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-yellow-400 transition-colors">
+                        {item.titleEn || item.title}
+                      </h3>
+                      <p className="text-white/70 text-xs leading-relaxed mb-2">
+                        {truncateText(item.excerptEn || item.excerpt || item.contentEn || item.content, 60)}
+                      </p>
+                      <Link href={`/en/news/${item.id || item._id}`} className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-xs font-medium">
+                        Read More
+                      </Link>
                     </div>
-                  )}
-                </div>
-                <div className="text-center mt-6">
-                  <Link
-                    href="/en/education"
-                    className="inline-block bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-blue-500/30 transition-colors duration-300"
-                  >
-                    View All Education →
-                  </Link>
-                </div>
-              </div>
+                  </article>
+                )}
+              />
 
-              {/* Products Section */}
-              <div className="glass-strong rounded-3xl p-4 sm:p-6 flex flex-col h-full">
-                <div className="text-center mb-6 animate-on-scroll">
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white/80 mb-3 text-shadow">Latest Product</h2>
-                </div>
-                <div className="space-y-4 flex-grow">
-                  {productItems.length > 0 ? (
-                    productItems.map((product, index) => (
-                      <article key={product.id} className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
-                        <div className="relative h-32 overflow-hidden">
-                          <img
-                            src={product.imageUrl || "https://images.unsplash.com/photo-1526657782461-9fe13402a841?w=400&h=300&fit=crop"}
-                            alt={product.nameEn || product.name}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                          <div className="absolute bottom-2 left-2 right-2">
-                            <span className="inline-block bg-green-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
-                              {product.category || 'Product'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="p-3">
-                          <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-green-400 transition-colors">
-                            {product.nameEn || product.name}
-                          </h3>
-                          <p className="text-white/70 text-xs leading-relaxed mb-2">
-                            {truncateText(product.descriptionEn || product.description, 60)}
-                          </p>
-                          <Link href={`/en/catalog`} className="text-green-400 hover:text-green-300 transition-colors duration-300 text-xs font-medium">
-                            View Product
-                          </Link>
-                        </div>
-                      </article>
-                    ))
-                  ) : (
-                    <div className="animate-on-scroll glass rounded-lg overflow-hidden hover-lift">
-                      <div className="relative h-32 overflow-hidden"><div className="w-full h-full bg-gray-700/50 flex items-center justify-center"><span className="text-white/50">Loading...</span></div></div>
-                      <div className="p-3"><div className="h-4 bg-gray-700/50 rounded mb-2"></div><div className="h-12 bg-gray-700/30 rounded mb-2"></div><div className="h-6 bg-gray-700/20 rounded"></div></div>
+              <HomepageContentSlider
+                title="Latest Education"
+                items={educationItems}
+                emptyState="Loading..."
+                viewAllHref="/en/education"
+                viewAllLabel="View All Education →"
+                buttonClassName="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30"
+                itemLabel="education item"
+                dir="ltr"
+                getKey={(item) => item.id || item._id || item.title}
+                renderItem={(item, index) => (
+                  <article className="group animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                    <div className="relative h-32 overflow-hidden">
+                      <img
+                        src={item.imageUrl || "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400&h=300&fit=crop"}
+                        alt={item.titleEn || item.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <span className="inline-block bg-blue-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                          {item.category || "Education"}
+                        </span>
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className="text-center mt-6">
-                  <Link
-                    href="/en/catalog"
-                    className="inline-block bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium hover:bg-green-500/30 transition-colors duration-300"
-                  >
-                    View All Products →
-                  </Link>
-                </div>
-              </div>
+                    <div className="p-3">
+                      <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-blue-400 transition-colors">
+                        {item.titleEn || item.title}
+                      </h3>
+                      <p className="text-white/70 text-xs leading-relaxed mb-2">
+                        {truncateText(item.descriptionEn || item.description, 60)}
+                      </p>
+                      <Link href={`/en/education/${item.id || item._id}`} className="text-blue-400 hover:text-blue-300 transition-colors duration-300 text-xs font-medium">
+                        View Course
+                      </Link>
+                    </div>
+                  </article>
+                )}
+              />
 
+              <HomepageContentSlider
+                title="Latest Product"
+                items={productItems}
+                emptyState="Loading..."
+                viewAllHref="/en/catalog"
+                viewAllLabel="View All Products →"
+                buttonClassName="bg-green-500/20 text-green-300 hover:bg-green-500/30"
+                itemLabel="product"
+                dir="ltr"
+                getKey={(item) => item.id || item._id || item.name}
+                renderItem={(item, index) => (
+                  <article className="group animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
+                    <div className="relative h-32 overflow-hidden">
+                      <img
+                        src={item.imageUrl || "https://images.unsplash.com/photo-1526657782461-9fe13402a841?w=400&h=300&fit=crop"}
+                        alt={item.nameEn || item.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <span className="inline-block bg-green-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                          {item.categoryEn || item.category || "Product"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <h3 className="text-base font-bold text-white/90 mb-2 leading-tight hover:text-green-400 transition-colors">
+                        {item.nameEn || item.name}
+                      </h3>
+                      <p className="text-white/70 text-xs leading-relaxed mb-2">
+                        {truncateText(item.descriptionEn || item.description, 60)}
+                      </p>
+                      <Link href="/en/catalog" className="text-green-400 hover:text-green-300 transition-colors duration-300 text-xs font-medium">
+                        View Product
+                      </Link>
+                    </div>
+                  </article>
+                )}
+              />
             </div>
           </div>
         </section>
@@ -494,17 +455,17 @@ export default function EnglishHomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  icon: "☀️",
+                  icon: "â˜€ï¸",
                   title: "Cost Savings",
                   description: "Significant reduction in monthly electricity bills with return on investment in less than 5 years"
                 },
                 {
-                  icon: "🌱",
+                  icon: "ðŸŒ±",
                   title: "Clean Environment",
                   description: "Reduce carbon emissions and help preserve the environment for future generations"
                 },
                 {
-                  icon: "⚡",
+                  icon: "âš¡",
                   title: "Energy Independence",
                   description: "Independent power generation and freedom from urban electricity grids"
                 }
@@ -541,27 +502,7 @@ export default function EnglishHomePage() {
           </div>
         </section>
 
-        {/* Toggle Button for Footer */}
-        <div className="relative z-20 py-8 text-center">
-          <button
-            onClick={() => setShowBottomSections(!showBottomSections)}
-            className="glass rounded-full p-4 hover-lift transition-all duration-300 group"
-          >
-            <div className="flex items-center gap-2 text-white/80 group-hover:text-white">
-              <span className="text-lg font-medium">
-                {showBottomSections ? 'Hide Footer' : 'Show Footer'}
-              </span>
-              <div className={`w-6 h-6 transition-transform duration-300 ${showBottomSections ? 'rotate-180' : ''}`}>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-          </button>
-        </div>
-
-        {/* Footer - Conditionally Rendered */}
-        {showBottomSections && <Footer />}
+        <Footer />
       </div>
     </>
   );

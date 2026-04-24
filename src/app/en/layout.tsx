@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import StructuredData from "@/components/StructuredData";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -114,6 +115,7 @@ export default function EnglishLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
+        <StructuredData />
         {children}
       </body>
     </html>

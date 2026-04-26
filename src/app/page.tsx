@@ -267,7 +267,7 @@ export default function Home() {
                   <article className="group animate-on-scroll glass rounded-lg overflow-hidden hover-lift" style={{ animationDelay: `${index * 0.2}s` }}>
                     <div className="relative h-32 overflow-hidden">
                       <img
-                        src={item.imageUrl || "https://images.unsplash.com/photo-1526657782461-9fe13402a841?w=400&h=300&fit=crop"}
+                        src={item.imageUrl || "https://azarsolar.com/wp-content/uploads/2023/05/2980448.jpg"}
                         alt={item.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
